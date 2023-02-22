@@ -27,8 +27,12 @@ public class ShipMovement : MonoBehaviourPun
         rb = GetComponent<Rigidbody>();
         if (!photonView.IsMine)
         {
-            GetComponentInChildren<Camera>().gameObject.SetActive(false);
-            GetComponentInChildren<AudioListener>().gameObject.SetActive(false);
+            Camera cameraObject = GetComponentInChildren<Camera>();
+            AudioListener audioListenerObject = GetComponentInChildren<AudioListener>();
+            
+            if (audioListenerObject is not null) audioListenerObject.gameObject.SetActive(false);
+            
+            if (cameraObject is not null) cameraObject.gameObject.SetActive(false);
         }
         else
         {
@@ -85,7 +89,6 @@ public class ShipMovement : MonoBehaviourPun
         }
 
         Vector3 velocity = transform.forward * currentSpeed * Time.fixedDeltaTime;
-        velocity.y = rb.velocity.y;
         rb.velocity = velocity;
         transform.Rotate(transform.up * horizontalInput * turnSpeed * Time.fixedDeltaTime);
     }
