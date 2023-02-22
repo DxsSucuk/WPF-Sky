@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using Photon.Pun;
 using Photon.Realtime;
+using Photon.Voice.PUN;
+using Photon.Voice.Unity;
 using UnityEngine;
 
 
@@ -19,6 +21,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     private bool inRoom;
 
     private DisconnectCause previousDisconnectCause;
+
+    public PunVoiceClient PunVoiceClient;
 
     public void Start()
     {
@@ -149,8 +153,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("Users in this Lobby " + PhotonNetwork.CurrentRoom.PlayerCount);
 
         if (PhotonNetwork.GetPhotonView(PhotonNetwork.SyncViewId) == null)
-            PhotonNetwork.Instantiate(playerPrefab.name, spawnpoints[new System.Random().Next(spawnpoints.Length)].transform.position,
+        {
+            GameObject playerGameObject = PhotonNetwork.Instantiate(playerPrefab.name,
+                spawnpoints[new System.Random().Next(spawnpoints.Length)].transform.position,
                 Quaternion.identity);
+
+            if (PunVoiceClient is not null)
+            {
+                PunVoiceClient.SpeakerPrefab = playerGameObject;
+            }
+        }
 
         Debug.Log("Creating");
     }
