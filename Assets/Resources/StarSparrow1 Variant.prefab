@@ -130,15 +130,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91175dcc15224463780e01a8a98b1b60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  voiceDetection: 0
+  voiceDetection: 1
   voiceDetectionThreshold: 0.01
   voiceDetectionDelayMs: 500
   interestGroup: 0
   debugEchoMode: 0
-  reliableMode: 0
+  reliableMode: 1
   encrypt: 0
   transmitEnabled: 1
-  samplingRate: 24000
+  samplingRate: 48000
   frameDuration: 20000
   bitrate: 30000
   sourceType: 0
@@ -180,7 +180,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 20
+  MaxDistance: 100
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -199,17 +199,17 @@ AudioSource:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.1
-      value: 0.5
-      inSlope: -5.0019917
-      outSlope: -5.0019917
+      time: 0.07456741
+      value: 0.55415344
+      inSlope: -2.404727
+      outSlope: -2.404727
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+      inWeight: 1
+      outWeight: 0.4982109
     - serializedVersion: 3
-      time: 0.2
-      value: 0.25
+      time: 0.3016922
+      value: 0.36250305
       inSlope: -1.2504979
       outSlope: -1.2504979
       tangentMode: 0
@@ -217,8 +217,8 @@ AudioSource:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.4
-      value: 0.125
+      time: 0.49321595
+      value: 0.2083435
       inSlope: -0.31262448
       outSlope: -0.31262448
       tangentMode: 0
