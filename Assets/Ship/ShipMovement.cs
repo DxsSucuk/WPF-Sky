@@ -1,12 +1,22 @@
-﻿using Photon.Pun;
+﻿using System;
+using Photon.Pun;
 using UnityEngine;
 
 public class ShipMovement : MonoBehaviourPun
 {
     public float baseSpeed;
+    public float maxPositiveSpeed;
+    public float maxNegativeSpeed;
     public float turnSpeed;
     public float currentSpeed;
 
+    public Camera viewCamera;
+
+    public bool invertCamera;
+
+    public float mouseSensitivity;
+    public float maxLookAngle;
+    
     private Rigidbody rb;
     
     private float horizontalInput;
@@ -18,6 +28,12 @@ public class ShipMovement : MonoBehaviourPun
         if (!photonView.IsMine)
         {
             GetComponentInChildren<Camera>().gameObject.SetActive(false);
+            GetComponentInChildren<AudioListener>().gameObject.SetActive(false);
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
@@ -25,6 +41,27 @@ public class ShipMovement : MonoBehaviourPun
     void Start()
     {
         
+    }
+
+    private float yaw, pitch;
+    private void Update()
+    {
+        yaw = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * mouseSensitivity;
+
+        if (!invertCamera)
+        {
+            pitch -= mouseSensitivity * Input.GetAxis("Mouse Y");
+        }
+        else
+        {
+            // Inverted Y
+            pitch += mouseSensitivity * Input.GetAxis("Mouse Y");
+        }
+
+        // Clamp pitch between lookAngle
+        pitch = Mathf.Clamp(pitch, -maxLookAngle, maxLookAngle);
+
+        transform.localEulerAngles = new Vector3(pitch, yaw, 0);
     }
 
     // Update is called once per frame
@@ -39,10 +76,10 @@ public class ShipMovement : MonoBehaviourPun
         
         currentSpeed += forwardInput * baseSpeed;
 
-        if (currentSpeed > 1500)
+        if (currentSpeed > maxPositiveSpeed)
         {
             currentSpeed = previousCurrentSpeed;
-        } else if (currentSpeed < -100)
+        } else if (currentSpeed < -maxNegativeSpeed)
         {
             currentSpeed = previousCurrentSpeed;
         }
