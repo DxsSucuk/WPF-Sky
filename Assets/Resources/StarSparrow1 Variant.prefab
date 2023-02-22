@@ -404,8 +404,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffb1b976074144608e425c8b93fd0075, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseSpeed: 2500
-  maxPositiveSpeed: 100000
+  baseSpeed: 2000
+  maxPositiveSpeed: 7000
   maxNegativeSpeed: 10000
   turnSpeed: 50
   currentSpeed: 0
