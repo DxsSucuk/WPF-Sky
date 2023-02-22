@@ -19,7 +19,7 @@ public class awakeControlller : MonoBehaviour
 
     private void FixedUpdate()
     {
-        toRotate.transform.Rotate(Vector3.up * rotateSpeed * Time.deltaTime);
+        //toRotate.transform.Rotate(Vector3.up * rotateSpeed * Time.deltaTime);
     }
 
 
