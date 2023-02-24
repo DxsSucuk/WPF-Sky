@@ -50,6 +50,8 @@ public class ShipMovement : MonoBehaviourPun
     private float yaw, pitch;
     private void Update()
     {
+        if (!photonView.IsMine) return;
+        
         yaw = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * mouseSensitivity;
 
         if (!invertCamera)
