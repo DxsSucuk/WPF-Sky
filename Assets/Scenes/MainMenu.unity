@@ -2680,6 +2680,7 @@ MonoBehaviour:
   MainMenuUIObject: {fileID: 1662334350}
   DefaultGameListEntryObject: {fileID: 56785952}
   GameListObject: {fileID: 1991936549}
+  UsernameInputField: {fileID: 1909246127}
 --- !u!4 &1003494862
 Transform:
   m_ObjectHideFlags: 0
