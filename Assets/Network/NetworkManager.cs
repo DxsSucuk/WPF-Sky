@@ -11,7 +11,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public PhotonView playerPrefab;
 
     public GameObject[] spawnpoints;
-    
+
     private int connectionRetries = 0;
 
     private bool rejoinCalled;
@@ -31,7 +31,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             if (PlayerPrefs.HasKey("username"))
             {
                 string nickname = PlayerPrefs.GetString("username");
-            
+
                 if (nickname.Length > 21 || string.IsNullOrWhiteSpace(nickname))
                 {
                     nickname = "RandomUser-" + RandomString(5);
@@ -44,13 +44,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 PhotonNetwork.NickName = "RandomUser-" + RandomString(5);
             }
         }
-        
-        if (!PhotonNetwork.IsConnected)
-            PhotonNetwork.ConnectUsingSettings();
 
-        if (!PhotonNetwork.InRoom && PhotonNetwork.IsConnectedAndReady)
-            PhotonNetwork.JoinRandomOrCreateRoom(null, 0, MatchmakingMode.FillRoom, null, null,
-                RandomString(5));
+        if (PhotonNetwork.IsConnected && PhotonNetwork.InRoom)
+        {
+            SpawnUser();
+        }
+        else
+        {
+            if (!PhotonNetwork.IsConnected)
+                PhotonNetwork.ConnectUsingSettings();
+
+            if (!PhotonNetwork.InRoom && PhotonNetwork.IsConnectedAndReady)
+                PhotonNetwork.JoinRandomOrCreateRoom(null, 0, MatchmakingMode.FillRoom, null, null,
+                    RandomString(5));
+        }
     }
 
     public override void OnDisconnected(DisconnectCause cause)
@@ -171,19 +178,29 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("Joined room " + PhotonNetwork.CurrentRoom.Name);
         Debug.Log("Users in this Lobby " + PhotonNetwork.CurrentRoom.PlayerCount);
 
+        SpawnUser();
+    }
+
+    void SpawnUser()
+    {
+        
+        Debug.Log("Creating");
         if (PhotonNetwork.GetPhotonView(PhotonNetwork.SyncViewId) == null)
         {
             GameObject playerGameObject = PhotonNetwork.Instantiate(playerPrefab.name,
                 spawnpoints[new System.Random().Next(spawnpoints.Length)].transform.position,
                 Quaternion.identity);
 
-            if (PunVoiceClient is not null)
+            if (PunVoiceClient is null)
+            {
+                return;
+            }
+
+            if (PunVoiceClient.SpeakerPrefab != playerGameObject)
             {
                 PunVoiceClient.SpeakerPrefab = playerGameObject;
             }
         }
-
-        Debug.Log("Creating");
     }
 
     public override void OnLeftRoom()

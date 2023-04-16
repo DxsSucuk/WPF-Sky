@@ -18,7 +18,7 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
     public GameObject GameListObject;
 
     public TMP_InputField UsernameInputField;
-    
+
     void Start()
     {
         connectToServer();
@@ -68,6 +68,7 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         base.OnConnectedToMaster();
+        PhotonNetwork.JoinLobby();
         RefreshGames();
     }
 
@@ -138,13 +139,13 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
                 GameObject.Destroy(layoutElement.gameObject);
             }
         }
-
-        PhotonNetwork.GetCustomRoomList(TypedLobby.Default, "");
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         base.OnRoomListUpdate(roomList);
+        
+        RefreshGames();
         
         if (GameListObject is null || !GameListObject.activeSelf)
         {
