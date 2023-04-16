@@ -38,13 +38,20 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
 
     void connectToServer()
     {
-        string regionValue = PlayerPrefs.GetString("region", "AUTO");
-        
-        PhotonNetwork.ConnectUsingSettings();
-        
-        if (PhotonNetwork.IsConnected && PhotonNetwork.CloudRegion != null && !PhotonNetwork.CloudRegion.ToUpper().Equals(regionValue) && !regionValue.Equals("AUTO"))
+        if (!PhotonNetwork.IsConnected)
         {
-            PhotonNetwork.Disconnect();
+            PhotonNetwork.ConnectUsingSettings();
+        }
+
+        /*string regionValue = PlayerPrefs.GetString("region", "AUTO");
+
+        if (PhotonNetwork.CloudRegion != null && !PhotonNetwork.CloudRegion.ToUpper().Equals(regionValue) && !regionValue.Equals("AUTO"))
+        {
+            if (!PhotonNetwork.IsConnected)
+            {
+                PhotonNetwork.Disconnect();
+            }
+            
             if (regionValue.Equals("AUTO"))
             {
                 Debug.Log("Connecting to best Region!");
@@ -62,7 +69,7 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
                 Debug.Log("Connecting to Region " + regionValue + "!");
                 PhotonNetwork.ConnectToRegion(regionValue);
             }
-        }
+        }*/
     }
 
     public override void OnConnectedToMaster()
@@ -121,7 +128,7 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
         {
             return;
         }
-        
+
         if (GameListObject is null || !GameListObject.activeSelf)
         {
             return;
@@ -143,8 +150,11 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        base.OnRoomListUpdate(roomList);
-        
+        if (roomList is null)
+        {
+            return;
+        }
+
         RefreshGames();
         
         if (GameListObject is null || !GameListObject.activeSelf)
@@ -160,10 +170,11 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
         foreach (RoomInfo roomInfo in roomList)
         {
             GameObject currentObject = Instantiate(DefaultGameListEntryObject, GameListObject.transform);
-            TextMeshPro contentButton = currentObject.GetComponentInChildren<TextMeshPro>();
+            TMP_Text contentButton = currentObject.GetComponentInChildren<TMP_Text>();
             contentButton.text = roomInfo.Name + " " + roomInfo.PlayerCount + "/" + roomInfo.MaxPlayers;
             Button button = currentObject.GetComponent<Button>();
             button.onClick.AddListener(() => JoinGame(roomInfo.Name));
+            currentObject.SetActive(true);
         }
     }
 
