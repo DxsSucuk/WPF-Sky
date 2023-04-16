@@ -26,6 +26,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void Start()
     {
+        if (string.IsNullOrWhiteSpace(PhotonNetwork.NickName))
+        {
+            if (PlayerPrefs.HasKey("username"))
+            {
+                string nickname = PlayerPrefs.GetString("username");
+            
+                if (nickname.Length > 21 || string.IsNullOrWhiteSpace(nickname))
+                {
+                    nickname = "RandomUser-" + RandomString(5);
+                }
+
+                PhotonNetwork.NickName = nickname;
+            }
+            else
+            {
+                PhotonNetwork.NickName = "RandomUser-" + RandomString(5);
+            }
+        }
+        
         if (!PhotonNetwork.IsConnected)
             PhotonNetwork.ConnectUsingSettings();
 

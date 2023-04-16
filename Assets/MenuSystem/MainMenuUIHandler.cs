@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
@@ -15,11 +16,53 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
 
     public GameObject DefaultGameListEntryObject;
     public GameObject GameListObject;
+
+    public TMP_InputField UsernameInputField;
     
-    // Start is called before the first frame update
     void Start()
     {
+        connectToServer();
+        if (PlayerPrefs.HasKey("username"))
+        {
+            string nickname = PlayerPrefs.GetString("username");
+            
+            if (nickname.Length > 21 || string.IsNullOrWhiteSpace(nickname))
+            {
+                return;
+            }
+
+            PhotonNetwork.NickName = PlayerPrefs.GetString("username");
+            UsernameInputField.text = PlayerPrefs.GetString("username");
+        }
+    }
+
+    public void connectToServer()
+    {
+        string regionValue = PlayerPrefs.GetString("region", "AUTO");
         
+        PhotonNetwork.ConnectUsingSettings();
+        
+        if (PhotonNetwork.IsConnected && PhotonNetwork.CloudRegion != null && !PhotonNetwork.CloudRegion.ToUpper().Equals(regionValue) && !regionValue.Equals("AUTO"))
+        {
+            PhotonNetwork.Disconnect();
+            if (regionValue.Equals("AUTO"))
+            {
+                Debug.Log("Connecting to best Region!");
+
+
+                PhotonNetwork.ConnectToBestCloudServer();
+            }
+            else if (regionValue.Equals("DEV"))
+            {
+                Debug.Log("Connecting to Region " + regionValue + "!");
+                PhotonNetwork.ConnectToRegion("EU");
+            }
+            else
+            {
+                Debug.Log("Connecting to Region " + regionValue + "!");
+                PhotonNetwork.ConnectToRegion(regionValue);
+            }
+        }
     }
 
     public override void OnConnectedToMaster()
@@ -28,14 +71,47 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
         RefreshGames();
     }
 
+    string RandomString(int length)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        return new string(Enumerable.Repeat(chars, length)
+            .Select(s => s[new System.Random().Next(s.Length)]).ToArray());
+    }
+    
     public void CreateGame()
     {
-        
+        Debug.Log("Creating Game");
+        connectToServer();
+        JoinGame(RandomString(5));
     }
 
     public void JoinGame(string lobbyId)
     {
+        Debug.Log("Joining Game");
+        connectToServer();
+
+        if (string.IsNullOrWhiteSpace(lobbyId)) return;
+
+        PhotonNetwork.JoinOrCreateRoom(lobbyId, new RoomOptions(), TypedLobby.Default);
+    }
+
+    public override void OnJoinedRoom()
+    {
+        Debug.Log("Joined room " + PhotonNetwork.CurrentRoom.Name);
+        Debug.Log("Users in this Lobby " + PhotonNetwork.CurrentRoom.PlayerCount);
+        PhotonNetwork.LoadLevel(SceneManagerHelper.ActiveSceneBuildIndex + 1);
+    }
+    
+    public void ChangeName()
+    {
+        if (UsernameInputField.text.Length > 21 || string.IsNullOrWhiteSpace(UsernameInputField.text))
+        {
+            return;
+        }
         
+        PhotonNetwork.NickName = UsernameInputField.text;
+        PlayerPrefs.SetString("username", UsernameInputField.text);
+        PlayerPrefs.Save();
     }
 
     public void RefreshGames()
@@ -85,6 +161,8 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
             GameObject currentObject = GameObject.Instantiate(DefaultGameListEntryObject, GameListObject.transform);
             TextMeshPro contentButton = currentObject.GetComponentInChildren<TextMeshPro>();
             contentButton.text = roomInfo.Name + " " + roomInfo.PlayerCount + "/" + roomInfo.MaxPlayers;
+            Button button = currentObject.GetComponent<Button>();
+            button.onClick.AddListener(() => JoinGame(roomInfo.Name));
         }
     }
 
