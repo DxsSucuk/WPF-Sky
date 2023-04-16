@@ -36,7 +36,7 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
         }
     }
 
-    public void connectToServer()
+    void connectToServer()
     {
         string regionValue = PlayerPrefs.GetString("region", "AUTO");
         
@@ -158,7 +158,7 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
 
         foreach (RoomInfo roomInfo in roomList)
         {
-            GameObject currentObject = GameObject.Instantiate(DefaultGameListEntryObject, GameListObject.transform);
+            GameObject currentObject = Instantiate(DefaultGameListEntryObject, GameListObject.transform);
             TextMeshPro contentButton = currentObject.GetComponentInChildren<TextMeshPro>();
             contentButton.text = roomInfo.Name + " " + roomInfo.PlayerCount + "/" + roomInfo.MaxPlayers;
             Button button = currentObject.GetComponent<Button>();
@@ -180,11 +180,5 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
         MainMenuUIObject.SetActive(true);
         ShipSelectionManagementObject.SetActive(false);
         MainMenuManagementObject.SetActive(true);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
