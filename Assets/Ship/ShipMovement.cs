@@ -92,6 +92,6 @@ public class ShipMovement : MonoBehaviourPun
 
         Vector3 velocity = transform.forward * currentSpeed * Time.fixedDeltaTime;
         rb.velocity = velocity;
-        transform.Rotate(transform.up * horizontalInput * turnSpeed * Time.fixedDeltaTime);
+        //// transform.Rotate(transform.up * horizontalInput * turnSpeed * Time.fixedDeltaTime);
     }
 }
