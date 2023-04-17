@@ -10,8 +10,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 {
     public PhotonView playerPrefab;
 
-    public GameObject[] spawnpoints;
-
     private int connectionRetries = 0;
 
     private bool rejoinCalled;
@@ -68,27 +66,27 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             PhotonNetwork.NetworkingClient.LoadBalancingPeer.PeerState);
         if (SceneManagerHelper.ActiveSceneBuildIndex == 1)
         {
-            if (this.rejoinCalled)
+            if (rejoinCalled)
             {
                 Debug.LogErrorFormat("Rejoin failed, client disconnected, causes; prev.:{0} current:{1}",
-                    this.previousDisconnectCause, cause);
-                this.rejoinCalled = false;
+                    previousDisconnectCause, cause);
+                rejoinCalled = false;
             }
-            else if (this.reconnectCalled)
+            else if (reconnectCalled)
             {
                 Debug.LogErrorFormat("Reconnect failed, client disconnected, causes; prev.:{0} current:{1}",
-                    this.previousDisconnectCause, cause);
-                this.reconnectCalled = false;
+                    previousDisconnectCause, cause);
+                reconnectCalled = false;
             }
 
             if (connectionRetries <= 3)
             {
                 ++connectionRetries;
-                this.HandleDisconnect(cause); // add attempts counter? to avoid infinite retries?
+                HandleDisconnect(cause); // add attempts counter? to avoid infinite retries?
             }
 
-            this.inRoom = false;
-            this.previousDisconnectCause = cause;
+            inRoom = false;
+            previousDisconnectCause = cause;
         }
     }
 
@@ -103,24 +101,24 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             case DisconnectCause.DisconnectByServerLogic:
             case DisconnectCause.AuthenticationTicketExpired:
             case DisconnectCause.DisconnectByServerReasonUnknown:
-                if (this.inRoom)
+                if (inRoom)
                 {
                     Debug.Log("calling PhotonNetwork.ReconnectAndRejoin()");
-                    this.rejoinCalled = PhotonNetwork.ReconnectAndRejoin();
-                    if (!this.rejoinCalled)
+                    rejoinCalled = PhotonNetwork.ReconnectAndRejoin();
+                    if (!rejoinCalled)
                     {
                         Debug.LogWarning(
                             "PhotonNetwork.ReconnectAndRejoin returned false, PhotonNetwork.Reconnect is called instead.");
-                        this.reconnectCalled = PhotonNetwork.Reconnect();
+                        reconnectCalled = PhotonNetwork.Reconnect();
                     }
                 }
                 else
                 {
                     Debug.Log("calling PhotonNetwork.Reconnect()");
-                    this.reconnectCalled = PhotonNetwork.Reconnect();
+                    reconnectCalled = PhotonNetwork.Reconnect();
                 }
 
-                if (!this.rejoinCalled && !this.reconnectCalled)
+                if (!rejoinCalled && !reconnectCalled)
                 {
                     Debug.LogError(
                         "PhotonNetwork.ReconnectAndRejoin() or PhotonNetwork.Reconnect() returned false, client stays disconnected.");
@@ -144,10 +142,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        if (this.reconnectCalled)
+        if (reconnectCalled)
         {
             Debug.Log("Reconnect successful");
-            this.reconnectCalled = false;
+            reconnectCalled = false;
             connectionRetries = 0;
         }
 
@@ -158,20 +156,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        if (this.rejoinCalled)
+        if (rejoinCalled)
         {
             Debug.LogErrorFormat("Quick rejoin failed with error code: {0} & error message: {1}", returnCode, message);
-            this.rejoinCalled = false;
+            rejoinCalled = false;
         }
     }
 
     public override void OnJoinedRoom()
     {
         inRoom = true;
-        if (this.rejoinCalled)
+        if (rejoinCalled)
         {
             Debug.Log("Rejoin successful");
-            this.rejoinCalled = false;
+            rejoinCalled = false;
             connectionRetries = 0;
         }
 
@@ -183,12 +181,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     void SpawnUser()
     {
-        
         Debug.Log("Creating");
         if (PhotonNetwork.GetPhotonView(PhotonNetwork.SyncViewId) == null)
         {
+           GameObject[] Spawnpoints = GameObject.FindGameObjectsWithTag("Respawn");
+            
             GameObject playerGameObject = PhotonNetwork.Instantiate(playerPrefab.name,
-                spawnpoints[new System.Random().Next(spawnpoints.Length)].transform.position,
+                Spawnpoints[new System.Random().Next(Spawnpoints.Length)].transform.position,
                 Quaternion.identity);
 
             if (PunVoiceClient is null)

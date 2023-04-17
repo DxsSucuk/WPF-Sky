@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters;
 using System;
 using System.Linq;
+using Photon.Pun;
 using UnityEngine;
 
-public class EGA_Laser : MonoBehaviour
+public class EGA_Laser : MonoBehaviourPun
 {
     public GameObject HitEffect;
     public float HitOffset = 0;
@@ -15,18 +16,21 @@ public class EGA_Laser : MonoBehaviour
 
     public float MainTextureLength = 1f;
     public float NoiseTextureLength = 1f;
-    private Vector4 Length = new Vector4(1,1,1,1);
+
+    private Vector4 Length = new Vector4(1, 1, 1, 1);
+
     //private Vector4 LaserSpeed = new Vector4(0, 0, 0, 0); {DISABLED AFTER UPDATE}
     //private Vector4 LaserStartSpeed; {DISABLED AFTER UPDATE}
     //One activation per shoot
     private bool LaserSaver = false;
     private bool UpdateSaver = false;
     public bool IsShip = false;
+    public float DamageValue = 20;
     private ParticleSystem[] Effects;
     private ParticleSystem[] Hit;
     private Rigidbody rb;
 
-    void Start ()
+    void Start()
     {
         //Get LineRender and ParticleSystem components from current prefab;  
         Laser = GetComponent<LineRenderer>();
@@ -46,7 +50,7 @@ public class EGA_Laser : MonoBehaviour
     {
         //if (Laser.material.HasProperty("_SpeedMainTexUVNoiseZW")) Laser.material.SetVector("_SpeedMainTexUVNoiseZW", LaserSpeed);
         //SetVector("_TilingMainTexUVNoiseZW", Length); - old code, _TilingMainTexUVNoiseZW no more exist
-        Laser.material.SetTextureScale("_MainTex", new Vector2(Length[0], Length[1]));                    
+        Laser.material.SetTextureScale("_MainTex", new Vector2(Length[0], Length[1]));
         Laser.material.SetTextureScale("_Noise", new Vector2(Length[2], Length[3]));
 
         //To set LineRender position
@@ -55,7 +59,7 @@ public class EGA_Laser : MonoBehaviour
             if (IsShip && rb is not null)
             {
                 var localVel = transform.InverseTransformDirection(rb.velocity);
-                
+
                 if (localVel.z < 0)
                 {
                     //End laser position if doesn't collide with object
@@ -70,7 +74,7 @@ public class EGA_Laser : MonoBehaviour
                     //Texture tiling
                     Length[0] = MainTextureLength * (Vector3.Distance(transform.position, EndPos));
                     Length[2] = NoiseTextureLength * (Vector3.Distance(transform.position, EndPos));
-                    
+
                     foreach (var AllPs in Effects)
                     {
                         if (Hit.Contains(AllPs))
@@ -107,6 +111,20 @@ public class EGA_Laser : MonoBehaviour
                         if (!AllPs.isPlaying) AllPs.Play();
                     }
 
+                    GameObject hitObject = hit.collider.gameObject;
+                    if (hitObject.TryGetComponent(out ShipEntity shipEntity))
+                    {
+                        handleShipHit(shipEntity);
+                    }
+                    else
+                    {
+                        ShipEntity shipParentEntity = hitObject.GetComponentInParent<ShipEntity>();
+                        if (shipParentEntity != null)
+                        {
+                            handleShipHit(shipParentEntity);
+                        }
+                    }
+                    
                     //Texture tiling
                     Length[0] = MainTextureLength * (Vector3.Distance(transform.position, hit.point));
                     Length[2] = NoiseTextureLength * (Vector3.Distance(transform.position, hit.point));
@@ -142,12 +160,19 @@ public class EGA_Laser : MonoBehaviour
         }
     }
 
+    [PunRPC]
+    private void handleShipHit(ShipEntity shipEntity)
+    {
+        shipEntity.Ship_DamageNonRPC(DamageValue);
+    }
+
     public void DisablePrepare()
     {
         if (Laser != null)
         {
             Laser.enabled = false;
         }
+
         UpdateSaver = true;
         //Effects can = null in multiply shooting
         if (Effects != null)

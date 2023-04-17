@@ -38,6 +38,11 @@ MonoBehaviour:
   - ClickRpc
   - DestroyRpc
   - HeresWhy
+  - KillShipRPC
+  - Ship_Death
+  - Ship_Heal
+  - handleShipHit
+  - Ship_Damage
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
