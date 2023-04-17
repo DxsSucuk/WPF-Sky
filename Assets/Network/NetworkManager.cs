@@ -2,7 +2,7 @@
 using Photon.Pun;
 using Photon.Realtime;
 using Photon.Voice.PUN;
-using Photon.Voice.Unity;
+
 using UnityEngine;
 
 
@@ -22,6 +22,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public PunVoiceClient PunVoiceClient;
 
+    public MinimapFollower MinimapFollower;
+    
     public void Start()
     {
         if (string.IsNullOrWhiteSpace(PhotonNetwork.NickName))
@@ -190,6 +192,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 Spawnpoints[new System.Random().Next(Spawnpoints.Length)].transform.position,
                 Quaternion.identity);
 
+            MinimapFollower.player = playerGameObject.transform;
+            
             if (PunVoiceClient is null)
             {
                 return;
