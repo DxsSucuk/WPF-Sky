@@ -8,6 +8,7 @@ public class NameTag : MonoBehaviourPun
     [SerializeField]
     private TMP_Text NametagText;
 
+    public bool RotateNametag = true;
     private Transform mainCameraTransform;
 
     private void Start()
@@ -23,6 +24,7 @@ public class NameTag : MonoBehaviourPun
 
     private void LateUpdate()
     {
+        if (!RotateNametag) return;
         transform.LookAt(transform.position + mainCameraTransform.rotation * Vector3.forward,
             mainCameraTransform.rotation * Vector3.up);
     }

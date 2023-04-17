@@ -43,6 +43,7 @@ MonoBehaviour:
   - Ship_Heal
   - handleShipHit
   - Ship_Damage
+  - Shoot
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

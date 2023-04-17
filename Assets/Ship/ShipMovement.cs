@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShipMovement : MonoBehaviourPun
 {
     public float baseSpeed;
+    public float acceleration;
     public float maxPositiveSpeed;
     public float maxNegativeSpeed;
     public float turnSpeed;
@@ -74,7 +75,7 @@ public class ShipMovement : MonoBehaviourPun
         // Clamp pitch between lookAngle
         pitch = Mathf.Clamp(pitch, -maxLookAngle, maxLookAngle);
 
-        transform.eulerAngles = new Vector3(pitch, yaw, 0);
+        transform.localEulerAngles = new Vector3(pitch, yaw, 0);
     }
 
     // Update is called once per frame
@@ -92,7 +93,7 @@ public class ShipMovement : MonoBehaviourPun
 
         float previousCurrentSpeed = currentSpeed;
         
-        currentSpeed += forwardInput * baseSpeed;
+        currentSpeed += forwardInput * (baseSpeed * acceleration);
 
         if (currentSpeed > maxPositiveSpeed)
         {
@@ -104,7 +105,7 @@ public class ShipMovement : MonoBehaviourPun
 
         Vector3 velocity = transform.forward * currentSpeed * Time.fixedDeltaTime;
         rb.velocity = velocity;
-        //// transform.Rotate(transform.up * horizontalInput * turnSpeed * Time.fixedDeltaTime);
+        transform.Rotate(transform.up * horizontalInput * turnSpeed * Time.fixedDeltaTime);
     }
     
     private void handleWeapon()
@@ -115,8 +116,9 @@ public class ShipMovement : MonoBehaviourPun
                 PhotonNetwork.Destroy(LaserInstance);
             
             LaserInstance = PhotonNetwork.Instantiate("Prefab/Laser/" + LaserPrefab.name, firePoint.position, firePoint.rotation);
-            LaserInstance.transform.parent = transform;
+            //// LaserInstance.transform.parent = transform;
             LaserScript = LaserInstance.GetComponent<EGA_Laser>();
+            photonView.RPC(nameof(Shoot), RpcTarget.All, LaserInstance.GetPhotonView().ViewID);
         }
         
         if (Input.GetMouseButtonUp(0))
@@ -124,5 +126,11 @@ public class ShipMovement : MonoBehaviourPun
             LaserScript.DisablePrepare();
             PhotonNetwork.Destroy(LaserInstance);
         }
+    }
+
+    [PunRPC]
+    private void Shoot(int viewId)
+    {
+        PhotonNetwork.GetPhotonView(viewId).gameObject.transform.parent = transform;
     }
 }

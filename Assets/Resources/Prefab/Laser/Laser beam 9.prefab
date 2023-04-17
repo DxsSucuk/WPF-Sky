@@ -39088,11 +39088,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HitEffect: {fileID: 1391582076066204}
   HitOffset: 0.05
-  MaxLength: 30
+  MaxLength: 70
   MainTextureLength: 0.1
   NoiseTextureLength: 0.3
   IsShip: 0
-  DamageValue: 20
+  DamageValue: 0.5
 --- !u!120 &120099581540643430
 LineRenderer:
   m_ObjectHideFlags: 0
