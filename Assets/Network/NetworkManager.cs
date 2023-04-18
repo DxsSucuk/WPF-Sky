@@ -188,7 +188,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
            GameObject[] Spawnpoints = GameObject.FindGameObjectsWithTag("Respawn");
             
-            GameObject playerGameObject = PhotonNetwork.Instantiate(playerPrefab.name,
+            GameObject playerGameObject = PhotonNetwork.Instantiate("Prefab/Ship/" + playerPrefab.name,
                 Spawnpoints[new System.Random().Next(Spawnpoints.Length)].transform.position,
                 Quaternion.identity);
 
