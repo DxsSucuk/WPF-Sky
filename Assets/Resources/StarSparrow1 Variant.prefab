@@ -595,12 +595,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 23649099192709106, guid: f805c7b2f982faf43833878e4f22ae2a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6246905147572573491, guid: f805c7b2f982faf43833878e4f22ae2a, type: 3}
       propertyPath: m_TagString
       value: Ship
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f805c7b2f982faf43833878e4f22ae2a, type: 3}
+--- !u!23 &5021303234389290877 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 23649099192709106, guid: f805c7b2f982faf43833878e4f22ae2a, type: 3}
+  m_PrefabInstance: {fileID: 5042699021670973583}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5040799771744195319 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4433942057210488, guid: f805c7b2f982faf43833878e4f22ae2a, type: 3}
@@ -767,6 +776,8 @@ MonoBehaviour:
   invertCamera: 0
   mouseSensitivity: 2
   maxLookAngle: 50
+  canShoot: 1
+  canMove: 1
 --- !u!114 &1524377793427037977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -867,8 +878,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HP: 0
   MAX_HP: 500
+  respawnDelay: 2
   Center: {fileID: 7352890383658570887}
   CorpseExplosion: {fileID: 1959126674990218, guid: a8c83f116a7fb3540bbe3ef447c75505, type: 3}
+  ShipModel: {fileID: 5021303234389290877}
+  ShipMovement: {fileID: -1878107060594742976}
 --- !u!1001 &5289370194616342848
 PrefabInstance:
   m_ObjectHideFlags: 0

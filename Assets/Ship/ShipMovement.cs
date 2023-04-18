@@ -28,6 +28,8 @@ public class ShipMovement : MonoBehaviourPun
     private float horizontalInput;
     private float forwardInput;
 
+    public bool canShoot = true, canMove = true;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -46,19 +48,27 @@ public class ShipMovement : MonoBehaviourPun
             Cursor.lockState = CursorLockMode.Locked;
         }
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+    
     private float yaw, pitch;
     private void Update()
     {
         if (!photonView.IsMine) return;
-        
+
         handleWeapon();
+        handleCamera();
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        if (!photonView.IsMine) return;
+        
+        handleMovement();
+    }
+
+    private void handleCamera()
+    {
+        if (!canMove) return;
         
         yaw = transform.eulerAngles.y + Input.GetAxis("Mouse X") * mouseSensitivity;
 
@@ -77,17 +87,11 @@ public class ShipMovement : MonoBehaviourPun
 
         transform.localEulerAngles = new Vector3(pitch, yaw, 0);
     }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        if (!photonView.IsMine) return;
-        
-        handleMovement();
-    }
-
+    
     private void handleMovement()
     {
+        if (!canMove) return;
+        
         horizontalInput = Input.GetAxis("Horizontal");
         forwardInput = Input.GetAxis("Vertical");
 
@@ -110,7 +114,7 @@ public class ShipMovement : MonoBehaviourPun
     
     private void handleWeapon()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && canShoot)
         {
             if (LaserInstance is not null && !LaserInstance.IsUnityNull())
                 PhotonNetwork.Destroy(LaserInstance);
@@ -123,6 +127,9 @@ public class ShipMovement : MonoBehaviourPun
         
         if (Input.GetMouseButtonUp(0))
         {
+            if (LaserInstance is null || LaserInstance.IsUnityNull())
+                return;
+            
             LaserScript.DisablePrepare();
             PhotonNetwork.Destroy(LaserInstance);
         }

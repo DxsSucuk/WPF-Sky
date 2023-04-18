@@ -29,6 +29,7 @@ public class EGA_Laser : MonoBehaviourPun
     private ParticleSystem[] Effects;
     private ParticleSystem[] Hit;
     private Rigidbody rb;
+    private ShipMovement ShipMovement;
 
     void Start()
     {
@@ -43,6 +44,7 @@ public class EGA_Laser : MonoBehaviourPun
         if (IsShip)
         {
             rb = GetComponentInParent<Rigidbody>();
+            ShipMovement = GetComponentInParent<ShipMovement>();
         }
     }
 
@@ -60,7 +62,7 @@ public class EGA_Laser : MonoBehaviourPun
             {
                 var localVel = transform.InverseTransformDirection(rb.velocity);
 
-                if (localVel.z < 0)
+                if (localVel.z < 0 && ShipMovement.canMove)
                 {
                     //End laser position if doesn't collide with object
                     var EndPos = transform.position + transform.forward * MaxLength;
@@ -159,8 +161,7 @@ public class EGA_Laser : MonoBehaviourPun
             }
         }
     }
-
-    [PunRPC]
+    
     private void handleShipHit(ShipEntity shipEntity)
     {
         shipEntity.Ship_DamageNonRPC(DamageValue);

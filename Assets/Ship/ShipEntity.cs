@@ -6,8 +6,11 @@ public class ShipEntity : MonoBehaviourPun
 {
     public float HP = 0;
     public float MAX_HP = 500;
+    public int respawnDelay = 2;
     public Transform Center;
     public GameObject CorpseExplosion;
+    public MeshRenderer ShipModel;
+    public ShipMovement ShipMovement;
 
     private void Awake()
     {
@@ -16,20 +19,25 @@ public class ShipEntity : MonoBehaviourPun
 
     public void Ship_DamageNonRPC(float damage)
     {
-        photonView.RPC("Ship_Damage", RpcTarget.All, damage);
+        photonView.RPC(nameof(Ship_Damage), RpcTarget.All, damage);
     }
     
     [PunRPC]
     public void Ship_Damage(float damage)
     {
-        HP -= damage;
-        if (HP <= 0)
+        if (HP > 0)
         {
+            HP -= damage;
+        }
+        else
+        {
+            if (HP < -1) return;
+            
             HP = -1;
             
             if (photonView.IsMine)
             {
-                photonView.RPC("Ship_Death", RpcTarget.All);
+                photonView.RPC(nameof(Ship_Death), RpcTarget.All);
             }
         }
     }
@@ -49,14 +57,39 @@ public class ShipEntity : MonoBehaviourPun
             if (HP < -1) return;
             
             HP = -2;
-            
-            GameObject[] Spawnpoints = GameObject.FindGameObjectsWithTag("Respawn");
-            
-            photonView.RPC("Ship_Heal", RpcTarget.All, 99999f);
+
+            if (ShipModel is not null)
+            {
+                photonView.RPC(nameof(Ship_Hide), RpcTarget.All);
+                ShipMovement.canShoot = false;
+                ShipMovement.canMove = false;
+                // Respawn in x seconds.
+                Invoke(nameof(Ship_Respawn), respawnDelay);
+            }
             
             PhotonNetwork.Instantiate("Prefab/Effect/" + CorpseExplosion.name, Center.position, Center.rotation);
-
-            transform.position = Spawnpoints[new System.Random().Next(Spawnpoints.Length)].transform.position;
         }
+    }
+
+    public void Ship_Respawn()
+    {
+        photonView.RPC(nameof(Ship_Heal), RpcTarget.All, 99999f);
+        GameObject[] Spawnpoints = GameObject.FindGameObjectsWithTag("Respawn");
+        transform.position = Spawnpoints[new System.Random().Next(Spawnpoints.Length)].transform.position;
+        ShipMovement.canShoot = true;
+        ShipMovement.canMove = true;
+        photonView.RPC(nameof(Ship_Show), RpcTarget.All);
+    }
+    
+    [PunRPC]
+    public void Ship_Show()
+    {
+        ShipModel.enabled = true;
+    }
+
+    [PunRPC]
+    public void Ship_Hide()
+    {
+        ShipModel.enabled = false;
     }
 }

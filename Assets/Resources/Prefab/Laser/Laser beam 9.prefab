@@ -39092,7 +39092,7 @@ MonoBehaviour:
   MainTextureLength: 0.1
   NoiseTextureLength: 0.3
   IsShip: 0
-  DamageValue: 0.5
+  DamageValue: 1
 --- !u!120 &120099581540643430
 LineRenderer:
   m_ObjectHideFlags: 0
