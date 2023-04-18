@@ -764,8 +764,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseSpeed: 2000
   acceleration: 0.1
-  maxPositiveSpeed: 7000
-  maxNegativeSpeed: 5000
+  maxPositiveSpeed: 10000
+  maxNegativeSpeed: 3000
   turnSpeed: 50
   currentSpeed: 0
   firePoint: {fileID: 1743232265864459023}
