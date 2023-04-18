@@ -1,5 +1,6 @@
 ﻿using System;
 using Photon.Pun;
+using Photon.Voice.PUN;
 using UnityEngine;
 
 public class ShipEntity : MonoBehaviourPun
@@ -15,6 +16,14 @@ public class ShipEntity : MonoBehaviourPun
     private void Awake()
     {
         HP = MAX_HP;
+        if (photonView.Owner is null)
+        {
+            PhotonVoiceView photonVoiceView = GetComponent<PhotonVoiceView>();
+            if (photonVoiceView is not null)
+            {
+                photonVoiceView.enabled = false;
+            }
+        }
     }
 
     public void Ship_DamageNonRPC(float damage)

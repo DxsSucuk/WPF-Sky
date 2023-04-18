@@ -787,7 +787,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 0
-  MAX_HP: 500
+  MAX_HP: 300
   respawnDelay: 2
   Center: {fileID: 349766379279895172}
   CorpseExplosion: {fileID: 1959126674990218, guid: a8c83f116a7fb3540bbe3ef447c75505, type: 3}

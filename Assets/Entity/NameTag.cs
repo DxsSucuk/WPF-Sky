@@ -29,5 +29,10 @@ public class NameTag : MonoBehaviourPun
             mainCameraTransform.rotation * Vector3.up);
     }
 
-    private void SetName() => NametagText.text = photonView.Owner.NickName;
+    private void SetName()
+    {
+        if (photonView.Owner is null) return;
+        
+        NametagText.text = photonView.Owner.NickName;
+    }
 }

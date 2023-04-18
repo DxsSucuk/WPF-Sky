@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Photon.Pun;
 using Photon.Realtime;
+using Photon.Voice.PUN;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +18,8 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
 
     public GameObject DefaultGameListEntryObject;
     public GameObject GameListObject;
+
+    public VehicleSelectionController VehicleSelectionController;
 
     public TMP_InputField UsernameInputField;
 
@@ -143,7 +147,7 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
         {
             if (layoutElement.isActiveAndEnabled)
             {
-                GameObject.Destroy(layoutElement.gameObject);
+                Destroy(layoutElement.gameObject);
             }
         }
     }
@@ -192,5 +196,18 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
         MainMenuUIObject.SetActive(true);
         ShipSelectionManagementObject.SetActive(false);
         MainMenuManagementObject.SetActive(true);
+        
+        if (PunVoiceClient.Instance is not null)
+        {
+            Destroy(PunVoiceClient.Instance.gameObject);
+        }
+    }
+
+    public void SelectShip()
+    {
+        if (VehicleSelectionController is null || VehicleSelectionController.IsUnityNull() || !VehicleSelectionController.isActiveAndEnabled) return;
+        
+        PlayerPrefs.SetString("ship_name", VehicleSelectionController.listOfShips.shipList[VehicleSelectionController.shipPointer].name);
+        PlayerPrefs.Save();
     }
 }

@@ -1,18 +1,15 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class awakeControlller : MonoBehaviour
+public class VehicleSelectionController : MonoBehaviour
 {
     public GameObject toRotate;
     public float rotateSpeed;
-    public vehicleList listOfShips;
+    public VehicleList listOfShips;
     public int shipPointer = 0;
 
     private void Awake()
     {
-        shipPointer = PlayerPrefs.GetInt("pointer");
+        shipPointer = PlayerPrefs.GetInt("pointer", 0);
         GameObject childObject = Instantiate(listOfShips.shipList[shipPointer], Vector3.zero, Quaternion.identity);
         childObject.transform.parent = toRotate.transform;
     }
@@ -28,8 +25,8 @@ public class awakeControlller : MonoBehaviour
         if (shipPointer < listOfShips.shipList.Count - 1)
         {
             Destroy(GameObject.FindWithTag("Ship"));
-            shipPointer++;
-            PlayerPrefs.SetInt("pointer",shipPointer);
+            PlayerPrefs.SetInt("pointer", ++shipPointer);
+            PlayerPrefs.Save();
             GameObject childObject = Instantiate(listOfShips.shipList[shipPointer], Vector3.zero, Quaternion.identity);
             childObject.transform.parent = toRotate.transform;
         }
@@ -40,8 +37,8 @@ public class awakeControlller : MonoBehaviour
         if (shipPointer > 0)
         {
             Destroy(GameObject.FindWithTag("Ship"));
-            shipPointer--;
-            PlayerPrefs.SetInt("pointer",shipPointer);
+            PlayerPrefs.SetInt("pointer", --shipPointer);
+            PlayerPrefs.Save();
             GameObject childObject = Instantiate(listOfShips.shipList[shipPointer], Vector3.zero, Quaternion.identity);
             childObject.transform.parent = toRotate.transform;
         }

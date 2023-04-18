@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &7996425065524519139
+--- !u!1001 &2782718508982438459
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1979740979863946, guid: 13fc4358bc4246c595947af766f52261, type: 3}
       propertyPath: m_Name
-      value: Laser beam 9 Variant
+      value: Laser beam 9 Variant 1
       objectReference: {fileID: 0}
     - target: {fileID: 4564889997644380, guid: 13fc4358bc4246c595947af766f52261, type: 3}
       propertyPath: m_RootOrder
@@ -57,11 +57,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114114590446338194, guid: 13fc4358bc4246c595947af766f52261, type: 3}
       propertyPath: MaxLength
-      value: 100
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 114114590446338194, guid: 13fc4358bc4246c595947af766f52261, type: 3}
       propertyPath: DamageValue
-      value: 0.5
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13fc4358bc4246c595947af766f52261, type: 3}
