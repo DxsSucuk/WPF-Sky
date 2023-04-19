@@ -22,8 +22,9 @@ public class ShipMovement : MonoBehaviourPun
 
     public float mouseSensitivity;
     public float maxLookAngle;
-    
+
     private Rigidbody rb;
+    private float defaultFov;
     
     private float horizontalInput;
     private float forwardInput;
@@ -32,6 +33,7 @@ public class ShipMovement : MonoBehaviourPun
 
     private void Awake()
     {
+        defaultFov = Camera.main.fieldOfView;
         rb = GetComponent<Rigidbody>();
         if (!photonView.IsMine)
         {
@@ -56,6 +58,7 @@ public class ShipMovement : MonoBehaviourPun
 
         handleWeapon();
         handleCamera();
+        handleCameraZoom();
     }
 
     // Update is called once per frame
@@ -86,6 +89,22 @@ public class ShipMovement : MonoBehaviourPun
         pitch = Mathf.Clamp(pitch, -maxLookAngle, maxLookAngle);
 
         transform.localEulerAngles = new Vector3(pitch, yaw, 0);
+    }
+
+    private void handleCameraZoom()
+    {
+        if (!canMove) return;
+        
+        var localVel = transform.InverseTransformDirection(rb.velocity);
+
+        if (localVel.z > 0)
+        {
+            Camera.main.fieldOfView = defaultFov + 20;
+        }
+        else
+        {
+            Camera.main.fieldOfView = defaultFov;
+        }
     }
     
     private void handleMovement()
