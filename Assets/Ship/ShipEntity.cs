@@ -35,8 +35,11 @@ public class ShipEntity : MonoBehaviourPun
         set
         {
             REAL_HP = value;
-            if (HPSlider is not null)
-                HPSlider.value = (MAX_HP / 100) * REAL_HP;
+            if (HPSlider is not null && photonView.IsMine)
+            {
+                float sliderValue = (REAL_HP / MAX_HP);
+                HPSlider.value = sliderValue;
+            }
         }
     }
 

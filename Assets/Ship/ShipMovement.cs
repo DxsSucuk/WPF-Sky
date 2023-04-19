@@ -94,12 +94,14 @@ public class ShipMovement : MonoBehaviourPun
     private void handleCameraZoom()
     {
         if (!canMove) return;
+
+        float maxFov = defaultFov + 10;
         
         var localVel = transform.InverseTransformDirection(rb.velocity);
 
         if (localVel.z > 0)
         {
-            Camera.main.fieldOfView = defaultFov + 20;
+            Camera.main.fieldOfView = maxFov;
         }
         else
         {
