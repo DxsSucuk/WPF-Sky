@@ -2,7 +2,6 @@
 
 public class MinimapFollower : MonoBehaviour
 {
-
     public Transform player;
 
     private void LateUpdate()

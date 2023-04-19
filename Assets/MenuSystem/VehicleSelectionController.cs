@@ -10,6 +10,10 @@ public class VehicleSelectionController : MonoBehaviour
     private void Awake()
     {
         shipPointer = PlayerPrefs.GetInt("pointer", 0);
+        if(shipPointer >= listOfShips.shipList.Count )
+            shipPointer = 0;
+        
+        
         GameObject childObject = Instantiate(listOfShips.shipList[shipPointer], Vector3.zero, Quaternion.identity);
         childObject.transform.parent = toRotate.transform;
     }
