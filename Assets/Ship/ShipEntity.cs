@@ -2,16 +2,18 @@
 using Photon.Pun;
 using Photon.Voice.PUN;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShipEntity : MonoBehaviourPun
 {
-    public float HP = 0;
+    public float REAL_HP = 0;
     public float MAX_HP = 500;
     public int respawnDelay = 2;
     public Transform Center;
     public GameObject CorpseExplosion;
     public MeshRenderer ShipModel;
     public ShipMovement ShipMovement;
+    public Slider HPSlider;
 
     private void Awake()
     {
@@ -26,11 +28,23 @@ public class ShipEntity : MonoBehaviourPun
         }
     }
 
+    public float HP
+    {
+        get => REAL_HP;
+
+        set
+        {
+            REAL_HP = value;
+            if (HPSlider is not null)
+                HPSlider.value = (MAX_HP / 100) * REAL_HP;
+        }
+    }
+
     public void Ship_DamageNonRPC(float damage)
     {
         photonView.RPC(nameof(Ship_Damage), RpcTarget.All, damage);
     }
-    
+
     [PunRPC]
     public void Ship_Damage(float damage)
     {
@@ -41,16 +55,16 @@ public class ShipEntity : MonoBehaviourPun
         else
         {
             if (HP < -1) return;
-            
+
             HP = -1;
-            
+
             if (photonView.IsMine)
             {
                 photonView.RPC(nameof(Ship_Death), RpcTarget.All);
             }
         }
     }
-    
+
     [PunRPC]
     public void Ship_Heal(float heal)
     {
@@ -64,7 +78,7 @@ public class ShipEntity : MonoBehaviourPun
         if (photonView.IsMine)
         {
             if (HP < -1) return;
-            
+
             HP = -2;
 
             if (ShipModel is not null)
@@ -75,7 +89,7 @@ public class ShipEntity : MonoBehaviourPun
                 // Respawn in x seconds.
                 Invoke(nameof(Ship_Respawn), respawnDelay);
             }
-            
+
             PhotonNetwork.Instantiate("Prefab/Effect/" + CorpseExplosion.name, Center.position, Center.rotation);
         }
     }
@@ -89,7 +103,7 @@ public class ShipEntity : MonoBehaviourPun
         ShipMovement.canMove = true;
         photonView.RPC(nameof(Ship_Show), RpcTarget.All);
     }
-    
+
     [PunRPC]
     public void Ship_Show()
     {

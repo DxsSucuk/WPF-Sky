@@ -4,6 +4,7 @@ using Photon.Realtime;
 using Photon.Voice.PUN;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class NetworkManager : MonoBehaviourPunCallbacks
@@ -23,6 +24,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public PunVoiceClient PunVoiceClient;
 
     public MinimapFollower MinimapFollower;
+
+    public Slider HPSlider;
     
     public void Start()
     {
@@ -192,6 +195,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 Spawnpoints[new System.Random().Next(Spawnpoints.Length)].transform.position,
                 Quaternion.identity);
 
+            playerGameObject.GetComponent<ShipEntity>().HPSlider = HPSlider;
+            
             MinimapFollower.player = playerGameObject.transform;
             
             if (PunVoiceClient is null)
