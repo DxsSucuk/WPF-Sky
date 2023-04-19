@@ -1056,13 +1056,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaa333ceac3a4d7db7c625ec3eba0b80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 0
+  REAL_HP: 0
   MAX_HP: 1000
   respawnDelay: 2
   Center: {fileID: 1507886119616436224}
   CorpseExplosion: {fileID: 1959126674990218, guid: a8c83f116a7fb3540bbe3ef447c75505, type: 3}
   ShipModel: {fileID: 3366976801242406207}
   ShipMovement: {fileID: 5220369834419229225}
+  HPSlider: {fileID: 0}
 --- !u!114 &7791847415689872089
 MonoBehaviour:
   m_ObjectHideFlags: 0
