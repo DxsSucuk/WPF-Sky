@@ -121,6 +121,8 @@ public class PlayerMovement: MonoBehaviourPunCallbacks
 
     private void MyInput()
     {
+        if (!photonView.IsMine) return;
+        
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
