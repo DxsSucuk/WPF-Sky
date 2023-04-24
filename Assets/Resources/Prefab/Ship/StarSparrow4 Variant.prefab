@@ -379,6 +379,67 @@ Transform:
   m_Father: {fileID: 3385420775344437769}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7382691498894048209
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7409865827858878197}
+  - component: {fileID: 6076956909749876724}
+  - component: {fileID: 1146279134577615842}
+  m_Layer: 0
+  m_Name: EnterPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7409865827858878197
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7382691498894048209}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 2.33}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3385420775344437769}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6076956909749876724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7382691498894048209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c207c833a94b47c0ae01d398fe48cf93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactableArea: 2
+  usable: 1
+  shipMovement: {fileID: 5220369834419229225}
+--- !u!135 &1146279134577615842
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7382691498894048209}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1192104555884774975
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1038,6 +1099,7 @@ MonoBehaviour:
   LaserPrefab: {fileID: 2781319312828771249, guid: 894ccc46b831c9a47bf603928cb704e5, type: 3}
   LaserInstance: {fileID: 0}
   LaserScript: {fileID: 0}
+  PlayerPrefab: {fileID: 5163902974362150188, guid: 672fb3cb6a48e2147913fc635d888267, type: 3}
   viewCamera: {fileID: 8731940909477656165}
   NameTagCanvas: {fileID: 8171403924022253259}
   invertCamera: 0
@@ -1045,6 +1107,8 @@ MonoBehaviour:
   maxLookAngle: 50
   canShoot: 1
   canMove: 1
+  inShip: 1
+  defaultConstraints: 0
 --- !u!114 &7163979236555704247
 MonoBehaviour:
   m_ObjectHideFlags: 0
