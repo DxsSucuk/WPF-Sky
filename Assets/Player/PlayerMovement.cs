@@ -37,6 +37,7 @@ public class PlayerMovement: MonoBehaviourPunCallbacks
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.LeftControl;
+    public KeyCode interactKey = KeyCode.E;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -127,6 +128,20 @@ public class PlayerMovement: MonoBehaviourPunCallbacks
         if (Input.GetKeyUp(crouchKey))
         {
             transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+        }
+        
+        if (Input.GetKeyDown(interactKey))
+        {
+            RaycastHit hit;
+
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit))
+            {
+                Interactable interactable = hit.collider.GetComponent<Interactable>();
+                if (interactable != null)
+                {
+                    interactable.InteractWithInteractable();
+                }
+            }
         }
     }
 

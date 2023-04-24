@@ -8,10 +8,10 @@ public class PlayerCameraSync : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerCamera == null) return;
+        if (playerCamera is null) return;
 
-        transform.position = playerCamera.position;
+        //// transform.position = playerCamera.position;
 
-        playerCamera.rotation = playerCameraController.playerCamera.transform.rotation;
+        transform.rotation = playerCamera.rotation;
     }
 }

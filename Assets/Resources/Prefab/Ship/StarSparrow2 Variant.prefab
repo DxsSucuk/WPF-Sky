@@ -1,5 +1,66 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2338932056980403805
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3467808514891407894}
+  - component: {fileID: 4070989375094385204}
+  - component: {fileID: 7215010115287801769}
+  m_Layer: 0
+  m_Name: EnterPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3467808514891407894
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2338932056980403805}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 2.33}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9036201636930492480}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4070989375094385204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2338932056980403805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c207c833a94b47c0ae01d398fe48cf93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactableArea: 2
+  usable: 1
+  shipMovement: {fileID: 570528741007136867}
+--- !u!135 &7215010115287801769
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2338932056980403805}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2581089445095890630
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,6 +853,7 @@ MonoBehaviour:
   LaserPrefab: {fileID: 7997841716508115305, guid: 70b0fbdb686da0040a85a72029c53a0f, type: 3}
   LaserInstance: {fileID: 0}
   LaserScript: {fileID: 0}
+  PlayerPrefab: {fileID: 5163902974362150188, guid: 672fb3cb6a48e2147913fc635d888267, type: 3}
   viewCamera: {fileID: 5449600126121884845}
   NameTagCanvas: {fileID: 1798940847379438024}
   invertCamera: 0
@@ -799,6 +861,7 @@ MonoBehaviour:
   maxLookAngle: 50
   canShoot: 1
   canMove: 1
+  inShip: 1
 --- !u!114 &1603165826959342259
 MonoBehaviour:
   m_ObjectHideFlags: 0

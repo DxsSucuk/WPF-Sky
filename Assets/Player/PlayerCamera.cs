@@ -16,7 +16,6 @@ public class PlayerCamera : MonoBehaviour
 
     void Awake()
     {
-        playerCamera = GetComponent<Camera>();
         SetFov(playerFOV);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

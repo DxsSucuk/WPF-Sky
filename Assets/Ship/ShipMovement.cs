@@ -32,7 +32,9 @@ public class ShipMovement : MonoBehaviourPun
     private float horizontalInput;
     private float forwardInput;
 
-    public bool canShoot = true, canMove = true;
+    private GameObject playerObject;
+    
+    public bool canShoot = true, canMove = true, inShip = true;
 
     private void Awake()
     {
@@ -157,7 +159,7 @@ public class ShipMovement : MonoBehaviourPun
 
     private void handleActions()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F) && inShip)
         {
             photonView.RPC(nameof(ShipLeaving), RpcTarget.All);
         }
@@ -167,17 +169,43 @@ public class ShipMovement : MonoBehaviourPun
     private void ShipLeaving()
     {
         NameTagCanvas.enabled = false;
+        inShip = false;
         if (photonView.IsMine)
         {
             viewCamera.gameObject.SetActive(false);
             canMove = false;
+            canShoot = false;
             spawnPlayer();
         }
     }
 
+    public void ShipEntering()
+    {
+        if (photonView.IsMine)
+        {
+            viewCamera.gameObject.SetActive(true);
+            canMove = true;
+            canShoot = true;
+            despawnPlayer();
+            photonView.RPC(nameof(ShipEntered), RpcTarget.All);
+        }
+    }
+
+    [PunRPC]
+    private void ShipEntered()
+    {
+        NameTagCanvas.enabled = false;
+        inShip = false;
+    }
+
     private void spawnPlayer()
     {
-        PhotonNetwork.Instantiate("Prefab/Player/" + PlayerPrefab.name, transform.position + Vector3.up, transform.rotation);
+        playerObject = PhotonNetwork.Instantiate("Prefab/Player/" + PlayerPrefab.name, transform.position + (Vector3.up * 5), transform.rotation);
+    }
+
+    private void despawnPlayer()
+    {
+        PhotonNetwork.Destroy(playerObject);
     }
     
     [PunRPC]
