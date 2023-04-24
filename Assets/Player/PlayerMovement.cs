@@ -71,11 +71,28 @@ public class PlayerMovement: MonoBehaviourPunCallbacks
 
     public bool sliding;
 
-    private void Start()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        if (!photonView.IsMine)
+        {
+            AudioListener audioListenerObject = GetComponentInChildren<AudioListener>();
+            
+            if (audioListenerObject is not null) audioListenerObject.gameObject.SetActive(false);
+            
+            if (_playerCamera is not null) _playerCamera.gameObject.SetActive(false);
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
 
+    
+    private void Start()
+    {
         readyToJump = true;
 
         startYScale = transform.localScale.y;
