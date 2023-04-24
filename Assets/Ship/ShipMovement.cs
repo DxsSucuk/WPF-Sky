@@ -36,10 +36,13 @@ public class ShipMovement : MonoBehaviourPun
     
     public bool canShoot = true, canMove = true, inShip = true;
 
+    public RigidbodyConstraints defaultConstraints;
+    
     private void Awake()
     {
         defaultFov = viewCamera.fieldOfView;
         rb = GetComponent<Rigidbody>();
+        defaultConstraints = rb.constraints;
         if (!photonView.IsMine)
         {
             AudioListener audioListenerObject = GetComponentInChildren<AudioListener>();
@@ -170,6 +173,7 @@ public class ShipMovement : MonoBehaviourPun
     {
         NameTagCanvas.enabled = false;
         inShip = false;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
         if (photonView.IsMine)
         {
             viewCamera.gameObject.SetActive(false);
@@ -194,6 +198,7 @@ public class ShipMovement : MonoBehaviourPun
     [PunRPC]
     private void ShipEntered()
     {
+        rb.constraints = defaultConstraints;
         NameTagCanvas.enabled = false;
         inShip = false;
     }

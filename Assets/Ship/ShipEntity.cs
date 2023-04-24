@@ -1,5 +1,4 @@
-﻿using System;
-using Photon.Pun;
+﻿using Photon.Pun;
 using Photon.Voice.PUN;
 using UnityEngine;
 using UnityEngine.UI;
@@ -80,6 +79,8 @@ public class ShipEntity : MonoBehaviourPun
         Debug.Log(photonView.Owner.NickName + " died!");
         if (photonView.IsMine)
         {
+            if (!ShipMovement.inShip) return;
+            
             if (HP < -1) return;
 
             HP = -2;
