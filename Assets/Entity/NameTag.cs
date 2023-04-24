@@ -25,6 +25,8 @@ public class NameTag : MonoBehaviourPun
     private void LateUpdate()
     {
         if (!RotateNametag) return;
+        if (mainCameraTransform is null) return;
+        
         transform.LookAt(transform.position + mainCameraTransform.rotation * Vector3.forward,
             mainCameraTransform.rotation * Vector3.up);
     }

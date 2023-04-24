@@ -36,7 +36,7 @@ public class ShipMovement : MonoBehaviourPun
     
     public bool canShoot = true, canMove = true, inShip = true;
 
-    public RigidbodyConstraints defaultConstraints;
+    private RigidbodyConstraints defaultConstraints;
     
     private void Awake()
     {
