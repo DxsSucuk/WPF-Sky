@@ -15,8 +15,11 @@ public class ShipMovement : MonoBehaviourPun
     public GameObject LaserPrefab;
     public GameObject LaserInstance;
     public EGA_Laser LaserScript;
+
+    public GameObject PlayerPrefab;
     
     public Camera viewCamera;
+    public Canvas NameTagCanvas;
 
     public bool invertCamera;
 
@@ -33,16 +36,15 @@ public class ShipMovement : MonoBehaviourPun
 
     private void Awake()
     {
-        defaultFov = Camera.main.fieldOfView;
+        defaultFov = viewCamera.fieldOfView;
         rb = GetComponent<Rigidbody>();
         if (!photonView.IsMine)
         {
-            Camera cameraObject = GetComponentInChildren<Camera>();
             AudioListener audioListenerObject = GetComponentInChildren<AudioListener>();
             
             if (audioListenerObject is not null) audioListenerObject.gameObject.SetActive(false);
             
-            if (cameraObject is not null) cameraObject.gameObject.SetActive(false);
+            if (viewCamera is not null) viewCamera.gameObject.SetActive(false);
         }
         else
         {
@@ -57,6 +59,8 @@ public class ShipMovement : MonoBehaviourPun
         if (!photonView.IsMine) return;
 
         handleWeapon();
+        handleActions();
+        if (!canMove) return;
         handleCamera();
         handleCameraZoom();
     }
@@ -65,14 +69,13 @@ public class ShipMovement : MonoBehaviourPun
     void FixedUpdate()
     {
         if (!photonView.IsMine) return;
-        
+        if (!canMove) return;
         handleMovement();
     }
 
     private void handleCamera()
     {
-        if (!canMove) return;
-        
+
         yaw = transform.eulerAngles.y + Input.GetAxis("Mouse X") * mouseSensitivity;
 
         if (!invertCamera)
@@ -93,26 +96,22 @@ public class ShipMovement : MonoBehaviourPun
 
     private void handleCameraZoom()
     {
-        if (!canMove) return;
-
         float maxFov = defaultFov + 10;
         
         var localVel = transform.InverseTransformDirection(rb.velocity);
 
         if (localVel.z > 0)
         {
-            Camera.main.fieldOfView = maxFov;
+            viewCamera.fieldOfView = maxFov;
         }
         else
         {
-            Camera.main.fieldOfView = defaultFov;
+            viewCamera.fieldOfView = defaultFov;
         }
     }
     
     private void handleMovement()
     {
-        if (!canMove) return;
-        
         horizontalInput = Input.GetAxis("Horizontal");
         forwardInput = Input.GetAxis("Vertical");
 
@@ -156,6 +155,31 @@ public class ShipMovement : MonoBehaviourPun
         }
     }
 
+    private void handleActions()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            photonView.RPC(nameof(ShipLeaving), RpcTarget.All);
+        }
+    }
+    
+    [PunRPC]
+    private void ShipLeaving()
+    {
+        NameTagCanvas.enabled = false;
+        if (photonView.IsMine)
+        {
+            viewCamera.gameObject.SetActive(false);
+            canMove = false;
+            spawnPlayer();
+        }
+    }
+
+    private void spawnPlayer()
+    {
+        PhotonNetwork.Instantiate("Prefab/Player/" + PlayerPrefab.name, transform.position + Vector3.up, transform.rotation);
+    }
+    
     [PunRPC]
     private void Shoot(int viewId)
     {

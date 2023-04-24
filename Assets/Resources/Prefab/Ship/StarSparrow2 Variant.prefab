@@ -57,7 +57,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 1000000
   field of view: 90
   orthographic: 0
   orthographic size: 5
@@ -793,6 +793,7 @@ MonoBehaviour:
   LaserInstance: {fileID: 0}
   LaserScript: {fileID: 0}
   viewCamera: {fileID: 5449600126121884845}
+  NameTagCanvas: {fileID: 1798940847379438024}
   invertCamera: 0
   mouseSensitivity: 2
   maxLookAngle: 50

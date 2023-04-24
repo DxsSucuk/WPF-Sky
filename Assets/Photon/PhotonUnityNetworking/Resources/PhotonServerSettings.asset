@@ -46,6 +46,8 @@ MonoBehaviour:
   - Shoot
   - Ship_Hide
   - Ship_Show
+  - handleShipLeaving
+  - ShipLeaving
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
