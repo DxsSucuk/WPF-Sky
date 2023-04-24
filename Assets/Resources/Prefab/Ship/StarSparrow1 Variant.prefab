@@ -842,7 +842,6 @@ MonoBehaviour:
   canShoot: 1
   canMove: 1
   inShip: 1
-  defaultConstraints: 0
 --- !u!114 &1524377793427037977
 MonoBehaviour:
   m_ObjectHideFlags: 0

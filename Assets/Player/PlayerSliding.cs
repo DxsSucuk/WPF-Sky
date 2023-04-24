@@ -37,6 +37,7 @@ public class PlayerSliding : MonoBehaviourPunCallbacks
 
     private void Update()
     {
+        if (!photonView.IsMine) return;
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
@@ -65,6 +66,7 @@ public class PlayerSliding : MonoBehaviourPunCallbacks
 
     private void SlidingMovement()
     {
+        if (!photonView.IsMine) return;
         Vector3 inputDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
         // sliding normal

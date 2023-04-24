@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Photon.Pun;
+using UnityEngine;
 
-public class PlayerCamera : MonoBehaviour
+public class PlayerCamera : MonoBehaviourPun
 {
     public Camera playerCamera;
 
@@ -16,13 +17,17 @@ public class PlayerCamera : MonoBehaviour
 
     void Awake()
     {
-        SetFov(playerFOV);
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        if (photonView.IsMine)
+        {
+            SetFov(playerFOV);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 
     void CameraMovement()
     {
+        if (!photonView.IsMine) return;
         float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * sensitivityX;
         float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * sensitivityY;
 

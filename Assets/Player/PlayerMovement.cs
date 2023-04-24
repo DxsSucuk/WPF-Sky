@@ -80,13 +80,6 @@ public class PlayerMovement: MonoBehaviourPunCallbacks
             AudioListener audioListenerObject = GetComponentInChildren<AudioListener>();
             
             if (audioListenerObject is not null) audioListenerObject.gameObject.SetActive(false);
-            
-            if (_playerCamera is not null) _playerCamera.gameObject.SetActive(false);
-        }
-        else
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
@@ -166,6 +159,7 @@ public class PlayerMovement: MonoBehaviourPunCallbacks
 
     private void StateHandler()
     {
+        if (!photonView.IsMine) return;
         // Mode - Sliding
         if (sliding)
         {
