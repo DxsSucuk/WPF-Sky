@@ -164,7 +164,7 @@ public class EGA_Laser : MonoBehaviourPun
     
     private void handleShipHit(ShipEntity shipEntity)
     {
-        shipEntity.Ship_DamageNonRPC(DamageValue);
+        shipEntity.Ship_DamageNonRPC(DamageValue, photonView.OwnerActorNr);
     }
 
     public void DisablePrepare()

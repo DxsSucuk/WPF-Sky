@@ -876,7 +876,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!82 &3759996620013468429
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1019,6 +1019,7 @@ MonoBehaviour:
   invertCamera: 0
   mouseSensitivity: 2
   maxLookAngle: 50
+  playerObject: {fileID: 0}
   canShoot: 1
   canMove: 1
   inShip: 1

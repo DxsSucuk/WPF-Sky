@@ -187,7 +187,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     void SpawnUser()
     {
         Debug.Log("Creating");
-        if (PhotonNetwork.GetPhotonView(PhotonNetwork.SyncViewId) == null)
+        if (PhotonNetwork.GetPhotonView(PhotonNetwork.SyncViewId) is null)
         {
            GameObject[] Spawnpoints = GameObject.FindGameObjectsWithTag("Respawn");
             
@@ -196,7 +196,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 Quaternion.identity);
 
             playerGameObject.GetComponent<ShipEntity>().HPSlider = HPSlider;
-            
+
             MinimapFollower.player = playerGameObject.transform;
             
             if (PunVoiceClient is null)

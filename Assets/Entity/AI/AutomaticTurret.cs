@@ -49,7 +49,7 @@ public class AutomaticTurret : MonoBehaviourPun
 
     private void Update()
     {
-        if (photonView.Controller is not null && photonView.Controller.IsMasterClient && photonView.IsMine)
+        if (PhotonNetwork.IsMasterClient && photonView.IsMine)
         {
             ChasePlayer();
         }

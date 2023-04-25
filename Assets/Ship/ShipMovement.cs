@@ -32,7 +32,7 @@ public class ShipMovement : MonoBehaviourPun
     private float horizontalInput;
     private float forwardInput;
 
-    private GameObject playerObject;
+    public GameObject playerObject;
     
     public bool canShoot = true, canMove = true, inShip = true;
 

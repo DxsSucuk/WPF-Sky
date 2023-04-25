@@ -1,4 +1,6 @@
-﻿using Photon.Pun;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
 using Photon.Voice.PUN;
 using UnityEngine;
 using UnityEngine.UI;
@@ -42,13 +44,13 @@ public class ShipEntity : MonoBehaviourPun
         }
     }
 
-    public void Ship_DamageNonRPC(float damage)
+    public void Ship_DamageNonRPC(float damage, int damagerId)
     {
-        photonView.RPC(nameof(Ship_Damage), RpcTarget.All, damage);
+        photonView.RPC(nameof(Ship_Damage), RpcTarget.All, damage, damagerId);
     }
 
     [PunRPC]
-    public void Ship_Damage(float damage)
+    public void Ship_Damage(float damage, int damagerId)
     {
         if (HP > 0)
         {
@@ -56,14 +58,13 @@ public class ShipEntity : MonoBehaviourPun
         }
         else
         {
-            if (!ShipMovement.inShip) return;
             if (HP < -1) return;
 
             HP = -1;
 
             if (photonView.IsMine)
             {
-                photonView.RPC(nameof(Ship_Death), RpcTarget.All);
+                photonView.RPC(nameof(Ship_Death), RpcTarget.All, damagerId);
             }
         }
     }
@@ -75,13 +76,11 @@ public class ShipEntity : MonoBehaviourPun
     }
 
     [PunRPC]
-    public void Ship_Death()
+    public void Ship_Death(int damagerId)
     {
-        Debug.Log(photonView.Owner.NickName + " died!");
+        Debug.Log(photonView.Owner.NickName + "s Ship died!");
         if (photonView.IsMine)
         {
-            if (!ShipMovement.inShip) return;
-            
             if (HP < -1) return;
 
             HP = -2;
@@ -89,11 +88,22 @@ public class ShipEntity : MonoBehaviourPun
             if (ShipModel is not null)
             {
                 photonView.RPC(nameof(Ship_Hide), RpcTarget.All);
-                ShipMovement.canShoot = false;
-                ShipMovement.canMove = false;
+                if (ShipMovement.inShip)
+                {
+                    ShipMovement.canShoot = false;
+                    ShipMovement.canMove = false;
+                }
+
                 // Respawn in x seconds.
                 Invoke(nameof(Ship_Respawn), respawnDelay);
             }
+
+            object[] content = new object[] { PhotonNetwork.LocalPlayer.ActorNumber, photonView.ViewID, damagerId };
+
+            PhotonNetwork.RaiseEvent(EventList.DEATH_EVENT, content, new RaiseEventOptions
+            {
+                Receivers = ReceiverGroup.MasterClient
+            }, SendOptions.SendReliable);
 
             PhotonNetwork.Instantiate("Prefab/Effect/" + CorpseExplosion.name, Center.position, Center.rotation);
         }
@@ -102,10 +112,19 @@ public class ShipEntity : MonoBehaviourPun
     public void Ship_Respawn()
     {
         photonView.RPC(nameof(Ship_Heal), RpcTarget.All, 99999f);
-        GameObject[] Spawnpoints = GameObject.FindGameObjectsWithTag("Respawn");
-        transform.position = Spawnpoints[new System.Random().Next(Spawnpoints.Length)].transform.position;
-        ShipMovement.canShoot = true;
-        ShipMovement.canMove = true;
+
+        if (ShipMovement.inShip)
+        {
+            GameObject[] Spawnpoints = GameObject.FindGameObjectsWithTag("Respawn");
+            transform.position = Spawnpoints[new System.Random().Next(Spawnpoints.Length)].transform.position;
+            ShipMovement.canShoot = true;
+            ShipMovement.canMove = true;
+        }
+        else
+        {
+            ShipMovement.transform.position = ShipMovement.playerObject.transform.position + (Vector3.up * 2);
+        }
+
         photonView.RPC(nameof(Ship_Show), RpcTarget.All);
     }
 
