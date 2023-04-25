@@ -37,6 +37,11 @@ public class ShipMovement : MonoBehaviourPun
     public bool canShoot = true, canMove = true, inShip = true;
 
     private RigidbodyConstraints defaultConstraints;
+
+    public bool shootableLaser = false;
+    
+    public float shootDelay = 0.1f;
+    public int velocityBoost = 3;
     
     private void Awake()
     {
@@ -67,6 +72,7 @@ public class ShipMovement : MonoBehaviourPun
     private void Update()
     {
         if (!photonView.IsMine) return;
+        if (!inShip) return;
 
         handleWeapon();
         handleActions();
@@ -79,6 +85,7 @@ public class ShipMovement : MonoBehaviourPun
     void FixedUpdate()
     {
         if (!photonView.IsMine) return;
+        if (!inShip) return;
         if (!canMove) return;
         handleMovement();
     }
@@ -144,24 +151,49 @@ public class ShipMovement : MonoBehaviourPun
     
     private void handleWeapon()
     {
-        if (Input.GetMouseButtonDown(0) && canShoot)
+        if (!shootableLaser)
         {
-            if (LaserInstance is not null && !LaserInstance.IsUnityNull())
+            if (Input.GetMouseButtonDown(0) && canShoot)
+            {
+                if (LaserInstance is not null && !LaserInstance.IsUnityNull())
+                    PhotonNetwork.Destroy(LaserInstance);
+
+                LaserInstance = PhotonNetwork.Instantiate("Prefab/Laser/" + LaserPrefab.name, firePoint.position,
+                    firePoint.rotation);
+                //// LaserInstance.transform.parent = transform;
+                LaserScript = LaserInstance.GetComponent<EGA_Laser>();
+                photonView.RPC(nameof(Shoot), RpcTarget.All, LaserInstance.GetPhotonView().ViewID);
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                if (LaserInstance is null || LaserInstance.IsUnityNull())
+                    return;
+
+                LaserScript.DisablePrepare();
                 PhotonNetwork.Destroy(LaserInstance);
-            
-            LaserInstance = PhotonNetwork.Instantiate("Prefab/Laser/" + LaserPrefab.name, firePoint.position, firePoint.rotation);
-            //// LaserInstance.transform.parent = transform;
-            LaserScript = LaserInstance.GetComponent<EGA_Laser>();
-            photonView.RPC(nameof(Shoot), RpcTarget.All, LaserInstance.GetPhotonView().ViewID);
+            }
         }
-        
-        if (Input.GetMouseButtonUp(0))
+        else
         {
-            if (LaserInstance is null || LaserInstance.IsUnityNull())
-                return;
-            
-            LaserScript.DisablePrepare();
-            PhotonNetwork.Destroy(LaserInstance);
+            if (Input.GetMouseButton(0) && canShoot)
+            {
+                GameObject LaserObject =
+                    PhotonNetwork.Instantiate("Prefab/Laser/" + LaserPrefab.name, firePoint.position, transform.rotation);
+
+                Rigidbody LaserRigidbody = LaserObject.GetComponent<Rigidbody>();
+                LaserRigidbody.AddForce(transform.TransformVector(Vector3.forward) * velocityBoost, ForceMode.Impulse);
+                canShoot = false;
+                Invoke(nameof(ResetShoot), shootDelay);
+            }
+        }
+    }
+
+    public void ResetShoot()
+    {
+        if (inShip)
+        {
+            canShoot = true;
         }
     }
 

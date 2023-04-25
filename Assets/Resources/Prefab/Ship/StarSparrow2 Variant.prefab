@@ -981,12 +981,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseSpeed: 2000
   acceleration: 0.25
-  maxPositiveSpeed: 20000
-  maxNegativeSpeed: 3000
+  maxPositiveSpeed: 25000
+  maxNegativeSpeed: 4000
   turnSpeed: 50
   currentSpeed: 0
   firePoint: {fileID: 6382770431757606890}
-  LaserPrefab: {fileID: 7997841716508115305, guid: 70b0fbdb686da0040a85a72029c53a0f, type: 3}
+  LaserPrefab: {fileID: 8946620860803727275, guid: 1e3915bb1bf359c4da077002b49953a6, type: 3}
   LaserInstance: {fileID: 0}
   LaserScript: {fileID: 0}
   PlayerPrefab: {fileID: 5163902974362150188, guid: 672fb3cb6a48e2147913fc635d888267, type: 3}
@@ -999,6 +999,9 @@ MonoBehaviour:
   canShoot: 1
   canMove: 1
   inShip: 1
+  shootableLaser: 1
+  shootDelay: 0.5
+  velocityBoost: 50
 --- !u!114 &1603165826959342259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1012,7 +1015,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   REAL_HP: 0
-  MAX_HP: 300
+  MAX_HP: 200
   respawnDelay: 2
   Center: {fileID: 349766379279895172}
   CorpseExplosion: {fileID: 1959126674990218, guid: a8c83f116a7fb3540bbe3ef447c75505, type: 3}

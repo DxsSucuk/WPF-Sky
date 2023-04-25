@@ -1353,9 +1353,13 @@ MonoBehaviour:
   invertCamera: 0
   mouseSensitivity: 2
   maxLookAngle: 50
+  playerObject: {fileID: 0}
   canShoot: 1
   canMove: 1
   inShip: 1
+  shootableLaser: 0
+  shootDelay: 0.1
+  velocityBoost: 3
 --- !u!114 &7163979236555704247
 MonoBehaviour:
   m_ObjectHideFlags: 0

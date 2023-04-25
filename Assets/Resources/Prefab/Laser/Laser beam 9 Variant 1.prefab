@@ -57,7 +57,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114114590446338194, guid: 13fc4358bc4246c595947af766f52261, type: 3}
       propertyPath: MaxLength
-      value: 40
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 114114590446338194, guid: 13fc4358bc4246c595947af766f52261, type: 3}
       propertyPath: DamageValue
