@@ -98,14 +98,14 @@ public class ShipEntity : MonoBehaviourPun
                 Invoke(nameof(Ship_Respawn), respawnDelay);
             }
 
+            PhotonNetwork.Instantiate("Prefab/Effect/" + CorpseExplosion.name, Center.position, Center.rotation);
+            
             object[] content = new object[] { PhotonNetwork.LocalPlayer.ActorNumber, photonView.ViewID, damagerId };
 
             PhotonNetwork.RaiseEvent(EventList.DEATH_EVENT, content, new RaiseEventOptions
             {
                 Receivers = ReceiverGroup.MasterClient
             }, SendOptions.SendReliable);
-
-            PhotonNetwork.Instantiate("Prefab/Effect/" + CorpseExplosion.name, Center.position, Center.rotation);
         }
     }
 
