@@ -205,7 +205,7 @@ public class ShipMovement : MonoBehaviourPun
     {
         rb.constraints = defaultConstraints;
         NameTagCanvas.enabled = false;
-        inShip = false;
+        inShip = true;
     }
 
     private void spawnPlayer()
