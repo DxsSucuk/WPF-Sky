@@ -7,9 +7,12 @@ using UnityEngine;
 
 public class DeathmatchManager : MonoBehaviour
 {
-    public int neededKills = 25;
+    public int neededKills = 10;
     private static Dictionary<int, int> playerKills = new();
 
+    public GameObject winScreen;
+    public GameObject loseScreen;
+    
     private void OnEnable()
     {
         PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
@@ -88,6 +91,15 @@ public class DeathmatchManager : MonoBehaviour
                 Player winnerPlayer = listOfPlayers.First(c => c.ActorNumber == winnerActorId);
 
                 Debug.Log(winnerPlayer.NickName + " won the Game with " + kills + "!");
+
+                if (winnerPlayer.ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
+                {
+                    winScreen.SetActive(true);
+                }
+                else
+                {
+                    loseScreen.SetActive(true);
+                }
             }
         }
     }
