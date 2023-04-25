@@ -56,6 +56,7 @@ public class ShipEntity : MonoBehaviourPun
         }
         else
         {
+            if (!ShipMovement.inShip) return;
             if (HP < -1) return;
 
             HP = -1;

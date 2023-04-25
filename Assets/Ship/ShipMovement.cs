@@ -50,6 +50,11 @@ public class ShipMovement : MonoBehaviourPun
             if (audioListenerObject is not null) audioListenerObject.gameObject.SetActive(false);
             
             if (viewCamera is not null) viewCamera.gameObject.SetActive(false);
+
+            if (!inShip)
+            {
+                rb.constraints = RigidbodyConstraints.FreezeAll;
+            }
         }
         else
         {
