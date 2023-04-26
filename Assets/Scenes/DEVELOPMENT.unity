@@ -1504,7 +1504,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3700887786387298269, guid: d2fed232327eaaf45a085ea13dbb70c1, type: 3}
       propertyPath: sightRange
-      value: 100
+      value: 250
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d2fed232327eaaf45a085ea13dbb70c1, type: 3}
@@ -1581,7 +1581,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3700887786387298269, guid: d2fed232327eaaf45a085ea13dbb70c1, type: 3}
       propertyPath: sightRange
-      value: 100
+      value: 250
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d2fed232327eaaf45a085ea13dbb70c1, type: 3}
@@ -3511,7 +3511,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3700887786387298269, guid: d2fed232327eaaf45a085ea13dbb70c1, type: 3}
       propertyPath: sightRange
-      value: 100
+      value: 250
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d2fed232327eaaf45a085ea13dbb70c1, type: 3}
