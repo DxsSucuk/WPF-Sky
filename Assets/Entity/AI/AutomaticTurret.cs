@@ -9,7 +9,7 @@ public class AutomaticTurret : MonoBehaviourPun
     public float sightRange;
     public GameObject targetPlayer;
 
-    public Transform firePoint;
+    public Transform[] firePoints;
 
     public GameObject LaserPrefab;
 
@@ -99,12 +99,16 @@ public class AutomaticTurret : MonoBehaviourPun
     public void Shoot()
     {
         if (!canShoot) return;
-        
-        GameObject LaserObject =
-            PhotonNetwork.Instantiate("Prefab/Laser/" + LaserPrefab.name, firePoint.position, transform.rotation);
 
-        Rigidbody LaserRigidbody = LaserObject.GetComponent<Rigidbody>();
-        LaserRigidbody.AddForce(transform.TransformVector(Vector3.forward) * velocityBoost, ForceMode.Impulse);
+        foreach (Transform firePoint in firePoints)
+        {
+            GameObject LaserObject =
+                PhotonNetwork.Instantiate("Prefab/Laser/" + LaserPrefab.name, firePoint.position, transform.rotation);
+
+            Rigidbody LaserRigidbody = LaserObject.GetComponent<Rigidbody>();
+            LaserRigidbody.AddForce(transform.TransformVector(Vector3.forward) * velocityBoost, ForceMode.Impulse);
+        }
+        
         canShoot = false;
         Invoke(nameof(ResetShoot), shootDelay);
     }

@@ -515,7 +515,8 @@ MonoBehaviour:
   whatIsPlayer: 7
   sightRange: 50
   targetPlayer: {fileID: 0}
-  firePoint: {fileID: 8885822043233509859}
+  firePoints:
+  - {fileID: 8885822043233509859}
   LaserPrefab: {fileID: 8946620860803727275, guid: 6514c8948774aa2479df1af68405cda6, type: 3}
   canShoot: 1
   shootDelay: 0.1
