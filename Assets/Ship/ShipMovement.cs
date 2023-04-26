@@ -72,11 +72,16 @@ public class ShipMovement : MonoBehaviourPun
     private void Update()
     {
         if (!photonView.IsMine) return;
+        
+        handleUIActions();
+        
         if (!inShip) return;
 
         handleWeapon();
         handleActions();
+        
         if (!canMove) return;
+        
         handleCamera();
         handleCameraZoom();
     }
@@ -88,6 +93,19 @@ public class ShipMovement : MonoBehaviourPun
         if (!inShip) return;
         if (!canMove) return;
         handleMovement();
+    }
+
+    private void handleUIActions()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            FindObjectOfType<ScoreboardManager>(true).gameObject.SetActive(true);
+        }
+
+        if (Input.GetKeyUp(KeyCode.Tab))
+        {
+            FindObjectOfType<ScoreboardManager>(true).gameObject.SetActive(false);
+        }
     }
 
     private void handleCamera()

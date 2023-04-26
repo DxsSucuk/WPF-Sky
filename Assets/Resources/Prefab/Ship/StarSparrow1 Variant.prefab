@@ -1023,6 +1023,9 @@ MonoBehaviour:
   canShoot: 1
   canMove: 1
   inShip: 1
+  shootableLaser: 0
+  shootDelay: 0.1
+  velocityBoost: 3
 --- !u!114 &1524377793427037977
 MonoBehaviour:
   m_ObjectHideFlags: 0
