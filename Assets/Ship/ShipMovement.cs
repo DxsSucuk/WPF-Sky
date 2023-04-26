@@ -1,4 +1,6 @@
 ﻿using Photon.Pun;
+using Photon.Voice.PUN;
+using Photon.Voice.Unity;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -42,12 +44,21 @@ public class ShipMovement : MonoBehaviourPun
     
     public float shootDelay = 0.1f;
     public int velocityBoost = 3;
+
+    public PhotonVoiceView photonVoiceView;
+    public Speaker photonSpeaker;
+    public AudioSource photonAudioSource;
     
     private void Awake()
     {
         defaultFov = viewCamera.fieldOfView;
         rb = GetComponent<Rigidbody>();
         defaultConstraints = rb.constraints;
+        
+        photonVoiceView = GetComponent<PhotonVoiceView>();
+        photonSpeaker = GetComponent<Speaker>();
+        photonAudioSource = GetComponent<AudioSource>();
+        
         if (!photonView.IsMine)
         {
             AudioListener audioListenerObject = GetComponentInChildren<AudioListener>();
@@ -260,6 +271,9 @@ public class ShipMovement : MonoBehaviourPun
         NameTagCanvas.enabled = false;
         inShip = false;
         rb.constraints = RigidbodyConstraints.FreezeAll;
+        photonVoiceView.enabled = false;
+        photonSpeaker.enabled = false;
+        photonAudioSource.enabled = false;
         if (photonView.IsMine)
         {
             viewCamera.gameObject.SetActive(false);
@@ -285,6 +299,9 @@ public class ShipMovement : MonoBehaviourPun
     private void ShipEntered()
     {
         rb.constraints = defaultConstraints;
+        photonVoiceView.enabled = true;
+        photonSpeaker.enabled = true;
+        photonAudioSource.enabled = true;
         NameTagCanvas.enabled = false;
         inShip = true;
     }
