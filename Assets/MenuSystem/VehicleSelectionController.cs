@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class VehicleSelectionController : MonoBehaviour
@@ -6,16 +7,16 @@ public class VehicleSelectionController : MonoBehaviour
     public float rotateSpeed;
     public VehicleList listOfShips;
     public int shipPointer = 0;
+    public TMP_Text shipName;
+    public TMP_Text shipTyp;
 
     private void Awake()
     {
         shipPointer = PlayerPrefs.GetInt("pointer", 0);
         if(shipPointer >= listOfShips.shipList.Count )
             shipPointer = 0;
-        
-        
-        GameObject childObject = Instantiate(listOfShips.shipList[shipPointer], Vector3.zero, Quaternion.identity);
-        childObject.transform.parent = toRotate.transform;
+
+        SetShip();
     }
 
     private void FixedUpdate()
@@ -31,8 +32,7 @@ public class VehicleSelectionController : MonoBehaviour
             Destroy(GameObject.FindWithTag("Ship"));
             PlayerPrefs.SetInt("pointer", ++shipPointer);
             PlayerPrefs.Save();
-            GameObject childObject = Instantiate(listOfShips.shipList[shipPointer], Vector3.zero, Quaternion.identity);
-            childObject.transform.parent = toRotate.transform;
+            SetShip();
         }
     }
     
@@ -43,8 +43,16 @@ public class VehicleSelectionController : MonoBehaviour
             Destroy(GameObject.FindWithTag("Ship"));
             PlayerPrefs.SetInt("pointer", --shipPointer);
             PlayerPrefs.Save();
-            GameObject childObject = Instantiate(listOfShips.shipList[shipPointer], Vector3.zero, Quaternion.identity);
-            childObject.transform.parent = toRotate.transform;
+            SetShip();
         }
+    }
+
+    public void SetShip()
+    {
+        GameObject childObject = Instantiate(listOfShips.shipList[shipPointer], Vector3.zero, Quaternion.identity);
+        childObject.transform.parent = toRotate.transform;
+        ShipEntity shipEntity = childObject.GetComponent<ShipEntity>();
+        shipName.text = shipEntity.shipName;
+        shipTyp.text = shipEntity.shipTyp.ToString();
     }
 }

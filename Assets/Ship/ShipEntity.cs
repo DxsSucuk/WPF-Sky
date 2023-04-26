@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class ShipEntity : MonoBehaviourPun
 {
+    public string shipName;
+    public ShipTyp shipTyp;
     public float REAL_HP = 0;
     public float MAX_HP = 500;
     public int respawnDelay = 2;

@@ -1002,6 +1002,9 @@ MonoBehaviour:
   shootableLaser: 1
   shootDelay: 0.5
   velocityBoost: 50
+  photonVoiceView: {fileID: 0}
+  photonSpeaker: {fileID: 0}
+  photonAudioSource: {fileID: 0}
 --- !u!114 &1603165826959342259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1014,6 +1017,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaa333ceac3a4d7db7c625ec3eba0b80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipName: Gonzales
+  shipTyp: 1
   REAL_HP: 0
   MAX_HP: 200
   respawnDelay: 2

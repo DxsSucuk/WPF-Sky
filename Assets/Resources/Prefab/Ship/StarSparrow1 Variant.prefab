@@ -1026,6 +1026,9 @@ MonoBehaviour:
   shootableLaser: 0
   shootDelay: 0.1
   velocityBoost: 3
+  photonVoiceView: {fileID: 0}
+  photonSpeaker: {fileID: 0}
+  photonAudioSource: {fileID: 0}
 --- !u!114 &1524377793427037977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1124,6 +1127,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaa333ceac3a4d7db7c625ec3eba0b80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipName: Average INO
+  shipTyp: 2
   REAL_HP: 0
   MAX_HP: 500
   respawnDelay: 2

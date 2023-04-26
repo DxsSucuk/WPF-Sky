@@ -216,5 +216,6 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
         
         PlayerPrefs.SetString("ship_name", VehicleSelectionController.listOfShips.shipList[VehicleSelectionController.shipPointer].name);
         PlayerPrefs.Save();
+        SwitchToMainMenu();
     }
 }
