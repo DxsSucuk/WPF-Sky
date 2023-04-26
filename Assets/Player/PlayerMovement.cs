@@ -7,8 +7,9 @@ using UnityEngine;
 public class PlayerMovement: MonoBehaviourPunCallbacks
 {
     public PlayerCamera _playerCamera;
-    
+
     [Header("Movement")]
+    public bool canMove = true;
     private float moveSpeed;
     public float walkSpeed;
     public float sprintSpeed;
@@ -115,6 +116,8 @@ public class PlayerMovement: MonoBehaviourPunCallbacks
     private void MyInput()
     {
         if (!photonView.IsMine) return;
+
+        if (!canMove) return;
         
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");

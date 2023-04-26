@@ -155,7 +155,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         if (!PhotonNetwork.InRoom)
-            PhotonNetwork.JoinRandomOrCreateRoom(null, 0, Photon.Realtime.MatchmakingMode.FillRoom, null, null,
+            PhotonNetwork.JoinRandomOrCreateRoom(null, 0, MatchmakingMode.FillRoom, null, null,
                 "Test");
     }
 

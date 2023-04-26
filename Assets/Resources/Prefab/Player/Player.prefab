@@ -336,6 +336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 6385576709765719813}
+  pm: {fileID: -8817026557924116089}
   yaw: 0
   pitch: 0
   playerFOV: 120
@@ -356,6 +357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerCamera: {fileID: 2025245990695457629}
+  canMove: 1
   walkSpeed: 7
   sprintSpeed: 13
   slideSpeed: 15

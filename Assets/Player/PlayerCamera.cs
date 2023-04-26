@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerCamera : MonoBehaviourPun
 {
     public Camera playerCamera;
+    public PlayerMovement pm;
 
     public float yaw;
     public float pitch;
@@ -28,6 +29,7 @@ public class PlayerCamera : MonoBehaviourPun
     void CameraMovement()
     {
         if (!photonView.IsMine) return;
+        if (!pm.canMove) return;
         float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * sensitivityX;
         float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * sensitivityY;
 

@@ -32,7 +32,7 @@ public class ShipMovement : MonoBehaviourPun
     private float horizontalInput;
     private float forwardInput;
 
-    public GameObject playerObject;
+    public PlayerMovement playerObject;
     
     public bool canShoot = true, canMove = true, inShip = true;
 
@@ -102,6 +102,37 @@ public class ShipMovement : MonoBehaviourPun
             FindObjectOfType<ScoreboardManager>(true).gameObject.SetActive(true);
         }
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameObject pauseObject = FindObjectOfType<PauseMenu>(true).gameObject;
+            if (pauseObject.activeSelf)
+            {
+                pauseObject.SetActive(false);
+                if (inShip)
+                {
+                    canMove = true;
+                    canShoot = true;
+                }
+                else
+                {
+                    playerObject.canMove = true;
+                }
+            }
+            else
+            {
+                pauseObject.SetActive(true);
+                if (inShip)
+                {
+                    canMove = false;
+                    canShoot = false;
+                }
+                else
+                {
+                    playerObject.canMove = false;
+                }
+            }
+        }
+        
         if (Input.GetKeyUp(KeyCode.Tab))
         {
             FindObjectOfType<ScoreboardManager>(true).gameObject.SetActive(false);
@@ -260,12 +291,12 @@ public class ShipMovement : MonoBehaviourPun
 
     private void spawnPlayer()
     {
-        playerObject = PhotonNetwork.Instantiate("Prefab/Player/" + PlayerPrefab.name, transform.position + (Vector3.up * 5), transform.rotation);
+        playerObject = PhotonNetwork.Instantiate("Prefab/Player/" + PlayerPrefab.name, transform.position + (Vector3.up * 5), transform.rotation).GetComponent<PlayerMovement>();
     }
 
     private void despawnPlayer()
     {
-        PhotonNetwork.Destroy(playerObject);
+        PhotonNetwork.Destroy(playerObject.gameObject);
     }
     
     [PunRPC]

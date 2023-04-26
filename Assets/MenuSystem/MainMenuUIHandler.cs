@@ -23,6 +23,13 @@ public class MainMenuUIHandler : MonoBehaviourPunCallbacks
 
     public TMP_InputField UsernameInputField;
 
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+
     void Start()
     {
         connectToServer();

@@ -38,6 +38,7 @@ public class PlayerSliding : MonoBehaviourPunCallbacks
     private void Update()
     {
         if (!photonView.IsMine) return;
+        if (!pm.canMove) return;
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
