@@ -12,13 +12,18 @@ public class ScoreboardManager : MonoBehaviour
 
     private void OnEnable()
     {
-        foreach (Player player in PhotonNetwork.PlayerList.OrderBy(c => c.NickName))
+        foreach (Player player in PhotonNetwork.PlayerList.OrderBy(c => (int)c.CustomProperties["kills"]))
         {
             var row = Instantiate(rowUI, rowTransform).GetComponent<ScoreboardRowUI>();
+            
+            int death = (int)player.CustomProperties["deaths"],
+                kills = (int)player.CustomProperties["kills"],
+                ping = (int)player.CustomProperties["ping"];
+            
             row.name.text = player.NickName;
-            row.death.text = "0";
-            row.kills.text = "0";
-            row.ping.text = "0";
+            row.death.text = death.ToString();
+            row.kills.text = kills.ToString();
+            row.ping.text = ping.ToString();
         }
     }
 

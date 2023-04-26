@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ExitGames.Client.Photon;
 using Photon.Pun;
@@ -9,10 +10,20 @@ public class DeathmatchManager : MonoBehaviour
 {
     public int neededKills = 10;
     private static Dictionary<int, int> playerKills = new();
+    private Hashtable PlayerCustomProps = new Hashtable();
 
     public GameObject winScreen;
     public GameObject loseScreen;
-    
+
+    private void Awake()
+    {
+        Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+        hash.Add("ping", PhotonNetwork.GetPing());
+        hash.Add("deaths", 0);
+        hash.Add("kills", 0);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+    }
+
     private void OnEnable()
     {
         PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
@@ -21,6 +32,13 @@ public class DeathmatchManager : MonoBehaviour
     private void OnDisable()
     {
         PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
+
+    private void LateUpdate()
+    {
+        Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+        hash["ping"] = PhotonNetwork.GetPing();
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
     }
 
     public void OnEvent(EventData photonEvent)
@@ -70,14 +88,32 @@ public class DeathmatchManager : MonoBehaviour
         {
             if (photonEvent.CustomData is object[] content)
             {
+                int localActorId = PhotonNetwork.LocalPlayer.ActorNumber;
+                
                 int killerActorId = (int)content[0];
                 int victimActorId = (int)content[1];
+                int kills = (int)content[2];
 
                 Player[] listOfPlayers = PhotonNetwork.PlayerList;
                 Player killerPlayer = listOfPlayers.First(c => c.ActorNumber == killerActorId);
                 Player victimPlayer = listOfPlayers.First(c => c.ActorNumber == victimActorId);
 
                 Debug.Log(killerPlayer.NickName + " killed " + victimPlayer.NickName);
+
+                Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
+
+                if (victimActorId == localActorId)
+                {
+                    int deaths = (int)hash["deaths"] + 1;
+                    hash["deaths"] = deaths;
+                }
+
+                if (killerActorId == localActorId)
+                {
+                    hash["kills"] = kills;
+                }
+                
+                PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
             }
         }
         else if (eventCode == EventList.GAME_OVER_EVENT)
