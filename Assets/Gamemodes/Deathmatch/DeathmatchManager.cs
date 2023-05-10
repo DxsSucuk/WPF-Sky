@@ -9,17 +9,18 @@ public class DeathmatchManager : MonoBehaviour
 {
     public int neededKills = 10;
     private static Dictionary<int, int> playerKills = new();
+    private static Hashtable localHashTable;
 
     public GameObject winScreen;
     public GameObject loseScreen;
 
     private void Awake()
     {
-        Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
-        hash.Add("ping", PhotonNetwork.GetPing());
-        hash.Add("deaths", 0);
-        hash.Add("kills", 0);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        localHashTable = new();
+        localHashTable.Add("ping", PhotonNetwork.GetPing());
+        localHashTable.Add("deaths", 0);
+        localHashTable.Add("kills", 0);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(localHashTable);
     }
 
     private void OnEnable()
@@ -34,9 +35,15 @@ public class DeathmatchManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
-        hash["ping"] = PhotonNetwork.GetPing();
-        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        localHashTable["ping"] = PhotonNetwork.GetPing();
+        if (PhotonNetwork.LocalPlayer.SetCustomProperties(localHashTable))
+        {
+            Debug.Log("Data send successfully!");
+        }
+        else
+        {
+            Debug.Log("Data send failed!");
+        }
     }
 
     public void OnEvent(EventData photonEvent)
@@ -100,22 +107,18 @@ public class DeathmatchManager : MonoBehaviour
 
                 Debug.Log(killerPlayer.NickName + " killed " + victimPlayer.NickName);
 
-                Hashtable hash = PhotonNetwork.LocalPlayer.CustomProperties;
-
                 if (victimActorId == localActorId)
                 {
-                    int newDeath = (int)hash["deaths"] + 1;
-                    hash["deaths"] = newDeath;
-                    Debug.Log("Current Local Deaths -> " + hash["deaths"] + ", it should be " + newDeath);
+                    int newDeath = (int)localHashTable["deaths"] + 1;
+                    localHashTable["deaths"] = newDeath;
+                    Debug.Log("Current Local Deaths -> " + localHashTable["deaths"] + ", it should be " + newDeath);
                 }
 
                 if (killerActorId == localActorId)
                 {
-                    hash["kills"] = kills;
-                    Debug.Log("Current Local Kills -> " + hash["kills"] + ", it should be " + kills);
+                    localHashTable["kills"] = kills;
+                    Debug.Log("Current Local Kills -> " + localHashTable["kills"] + ", it should be " + kills);
                 }
-                
-                PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
             }
         }
         else if (eventCode == EventList.GAME_OVER_EVENT)
