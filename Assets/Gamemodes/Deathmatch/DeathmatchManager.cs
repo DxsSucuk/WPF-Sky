@@ -104,13 +104,15 @@ public class DeathmatchManager : MonoBehaviour
 
                 if (victimActorId == localActorId)
                 {
-                    int deaths = (int)hash["deaths"] + 1;
-                    hash["deaths"] = deaths;
+                    int newDeath = (int)hash["deaths"] + 1;
+                    hash["deaths"] = newDeath;
+                    Debug.Log("Current Local Deaths -> " + hash["deaths"] + ", it should be " + newDeath);
                 }
 
                 if (killerActorId == localActorId)
                 {
                     hash["kills"] = kills;
+                    Debug.Log("Current Local Kills -> " + hash["kills"] + ", it should be " + kills);
                 }
                 
                 PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
