@@ -38,7 +38,7 @@ public class DeathmatchManager : MonoBehaviour
         localHashTable["ping"] = PhotonNetwork.GetPing();
         if (PhotonNetwork.LocalPlayer.SetCustomProperties(localHashTable))
         {
-            Debug.Log("Data send successfully!");
+            //// Debug.Log("Data send successfully!");
         }
         else
         {
