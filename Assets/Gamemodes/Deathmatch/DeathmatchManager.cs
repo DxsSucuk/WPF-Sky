@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ExitGames.Client.Photon;
 using Photon.Pun;
@@ -10,7 +9,6 @@ public class DeathmatchManager : MonoBehaviour
 {
     public int neededKills = 10;
     private static Dictionary<int, int> playerKills = new();
-    private Hashtable PlayerCustomProps = new Hashtable();
 
     public GameObject winScreen;
     public GameObject loseScreen;
@@ -61,10 +59,12 @@ public class DeathmatchManager : MonoBehaviour
                 {
                     playerKills.Remove(damagerId);
                 }
-                
-                playerKills.Add(damagerId, ++kills);
 
-                Debug.Log(playerKills);
+                kills += 1;
+                
+                playerKills.Add(damagerId, kills);
+
+                Debug.Log(damagerId + " - > " + kills);
                 
                 object[] contentNew = new object[] { damagerId, actorNr, kills};
 
@@ -128,6 +128,13 @@ public class DeathmatchManager : MonoBehaviour
 
                 Debug.Log(winnerPlayer.NickName + " won the Game with " + kills + "!");
 
+                if (PhotonNetwork.GetPhotonView(PhotonNetwork.SyncViewId)
+                    .TryGetComponent(out ShipMovement shipMovement))
+                {
+                    shipMovement.canShoot = false;
+                    shipMovement.canMove = false;
+                }
+                
                 if (winnerPlayer.ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
                 {
                     winScreen.SetActive(true);
